@@ -92,7 +92,33 @@ def modify_recipe():
     print(f"\nRecipe has been successfully updated.")
 
 def delete_recipe():
-    pass
+    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    
+    category = inquirer.rawlist(
+        message="Select a category to delete a recipe:",
+        choices = categories
+    ).execute() 
+
+    if category == "Exit":
+        print("Selection canceled.")
+        return
+    
+    category_recipes = db.table(category).all()
+
+    if not category_recipes:
+        print(f"No recipes found in the {category} category.")
+        return
+
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(category_recipes)]
+
+    selected_recipe_index = inquirer.select(
+        message="Select a recipe to delete:",
+        choices=recipe_choices
+    ).execute()
+
+    selected_recipe = category_recipes[selected_recipe_index]
+
+    
 
 def current_recipes():
     pass
