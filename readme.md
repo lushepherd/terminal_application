@@ -61,3 +61,7 @@ I have provided detailed screenshots below.
 ### Help Documentation
 
 ## Resources
+
+- inquirerpy.readthedocs.io. (n.d.). rawlist - InquirerPy. [online] Available at: https://inquirerpy.readthedocs.io/en/latest/pages/prompts/rawlist.html [Accessed 11 Dec. 2023].
+
+‌
