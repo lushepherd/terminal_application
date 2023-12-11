@@ -9,7 +9,7 @@ from fpdf import FPDF
 db = TinyDB("recipes_db.json")
 
 def add_recipe():
-    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    categories = ["Breakfast 🥓 🥐", "Lunch 🥪 🥖", "Dinner 🥗 🍔", "Snacks 🧁 🥨", "Dessert 🍰 🍨", "Exit"]
 
     category = inquirer.rawlist(
             message = "Select a category or 'Exit' to cancel",
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 # Modify a current recipe
 
 def modify_recipe():
-    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    categories = ["Breakfast 🥓", "Lunch 🥪🥖", "Dinner 🥗🍔", "Snacks 🧁🥨", "Dessert 🍰🍨", "Exit"]
     
     category = inquirer.rawlist(
         message="Select a category to modify a recipe:",
@@ -95,7 +95,7 @@ def modify_recipe():
 # Delete a recipe
 
 def delete_recipe():
-    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    categories = ["Breakfast 🥓🥐", "Lunch 🥪🥖", "Dinner 🥗🍔", "Snacks 🧁🥨", "Dessert 🍰🍨", "Exit"]
     
     category = inquirer.rawlist(
         message="Select a category to delete a recipe:",
@@ -127,7 +127,7 @@ def delete_recipe():
 # View current recipes
 
 def current_recipes():
-    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    categories = ["Breakfast 🥓🥐", "Lunch 🥪🥖", "Dinner 🥗🍔", "Snacks 🧁🥨", "Dessert 🍰🍨", "Exit"]
     
     category = inquirer.rawlist(
         message="Select a category to view:",
@@ -194,7 +194,7 @@ def export_to_pdf(recipe):
     pdf.output(f"{recipe['recipe_name']}_recipe.pdf")        
 
 def export_recipe():
-    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    categories = ["Breakfast 🥓🥐", "Lunch 🥪🥖", "Dinner 🥗🍔", "Snacks 🧁🥨", "Dessert 🍰🍨", "Exit"]
     
     category = inquirer.rawlist(
         message="Select a category to view:",
