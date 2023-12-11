@@ -1,6 +1,7 @@
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from tinydb import TinyDB, Query
+from fpdf import FPDF
 
 # User needs to be able to create a recipe under a category with name/ ingredients/ method
 # Needs to be able to be modified/ deleted/ browsed/ searched/ exported to PDF
@@ -122,10 +123,103 @@ def delete_recipe():
     print(f"{selected_recipe['recipe_name']} has been deleted.")
 
 def current_recipes():
-    pass
+    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    
+    category = inquirer.rawlist(
+        message="Select a category to view:",
+        choices = categories
+    ).execute() 
+
+    if category == "Exit":
+        print("Selection canceled.")
+        return
+    
+    category_recipes = db.table(category).all()
+
+    if not category_recipes:
+        print(f"No recipes found in the {category} category.")
+        return
+
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(category_recipes)]
+
+    selected_recipe_index = inquirer.select(
+        message="Select a recipe to view:",
+        choices=recipe_choices
+    ).execute()
+
+    selected_recipe = category_recipes[selected_recipe_index]
+
+    print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
 def search_recipes():
-    pass
+    
+    search_term = inquirer.text(
+        message="Enter a recipe name or ingredient to search or type 'exit' to cancel:"
+    ).execute().lower()
+
+    if search_term == 'exit'.lower():
+        print("Search canceled.")
+        return
+    
+    # Haven't figured out the search function yet
+
+    print(f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
+
+class PDF(FPDF):
+    def header(self):
+        image_path = "images/logo.png"
+        self.image(image_path, 10, 8, 33)
+        self.set_font("Arial", "B", 12)
+        self.cell(0, 10, "Your Recipe", 0, 1, "C")
+
+    def chapter_title(self, title):
+        self.set_font("Arial", "B", 12)
+        self.cell(0, 10, title, 0, 1, "L")
+        self.ln(4)
+
+    def chapter_body(self, body):
+        self.set_font("Arial", "", 12)
+        self.multi_cell(0, 10, body)
+
+def export_to_pdf(recipe):
+    pdf = PDF()
+    pdf.add_page()
+    pdf.chapter_title(recipe["recipe_name"])
+    pdf.chapter_body(f"Ingredients: {', '.join(recipe['ingredients'])}")
+    pdf.chapter_body(f"Method: {recipe['method']}")
+    pdf.output(f"{recipe['recipe_name']}_recipe.pdf")        
 
 def export_recipe():
-    pass
+    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    
+    category = inquirer.rawlist(
+        message="Select a category to view:",
+        choices = categories
+    ).execute() 
+
+    if category == "Exit":
+        print("Selection canceled.")
+        return
+    
+    category_recipes = db.table(category).all()
+
+    if not category_recipes:
+        print(f"No recipes found in the {category} category.")
+        return
+
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(category_recipes)]
+
+    selected_recipe_index = inquirer.select(
+        message="Select a recipe to view:",
+        choices=recipe_choices
+    ).execute()
+
+    selected_recipe = category_recipes[selected_recipe_index]
+
+    print(f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
+
+    export_to_pdf(selected_recipe)
+    print(f"Recipe '{selected_recipe['recipe_name']}' exported to PDF.")
+
+if __name__ == "__main__":
+    export_recipe(option_menu) 
