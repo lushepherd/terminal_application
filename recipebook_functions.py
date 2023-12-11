@@ -14,6 +14,28 @@ def add_recipe():
             message = "Select a category or 'Exit' to cancel",
             choices = categories
         ).execute()
+    
+    if category == "Exit":
+        print("Selection canceled.")
+        return
+    
+    name = inquirer.text(message="Enter the recipe name:").execute()
+
+    ingredients = inquirer.text(message="Enter the ingredients separated by commas:").execute().split(',')
+
+    method = inquirer.text(message="Enter the method:").execute()
+
+    recipe_data = {
+            "recipe_category": category,
+            "recipe_name": name,
+            "ingredients": ingredients,
+            "method": method,
+        }
+    
+    category_db = db.table(category)
+    category_db.insert(recipe_data)
+
+    print("Recipe added successfully!")
 
 if __name__ == "__main__":
     add_recipe()    
