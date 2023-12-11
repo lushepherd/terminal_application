@@ -118,7 +118,8 @@ def delete_recipe():
 
     selected_recipe = category_recipes[selected_recipe_index]
 
-    
+    db.table(category).remove(Query().recipe_name == selected_recipe["recipe_name"])
+    print(f"{selected_recipe['recipe_name']} has been deleted.")
 
 def current_recipes():
     pass
