@@ -70,4 +70,10 @@ I have provided detailed screenshots below.
 
 - tinydb.readthedocs.io. (n.d.). Getting Started — TinyDB 4.8.0 documentation. [online] Available at: https://tinydb.readthedocs.io/en/latest/getting-started.html#basic-usage [Accessed 11 Dec. 2023].
 
-‌‌
+- inquirerpy.readthedocs.io. (n.d.). inquirer - InquirerPy. [online] Available at: https://inquirerpy.readthedocs.io/en/latest/pages/inquirer.html [Accessed 11 Dec. 2023].
+
+- tinydb.readthedocs.io. (n.d.). Advanced Usage — TinyDB 4.8.0 documentation. [online] Available at: https://tinydb.readthedocs.io/en/latest/usage.html#updating-data [Accessed 11 Dec. 2023].
+
+- pyfpdf.readthedocs.io. (n.d.). Tutorial - PyFPDF. [online] Available at: https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html#tutorial [Accessed 11 Dec. 2023].
+
+‌

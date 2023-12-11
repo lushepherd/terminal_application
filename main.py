@@ -1,10 +1,15 @@
 from InquirerPy import inquirer
-from InquirerPy.base.control import Choice
-from InquirerPy.separator import Separator
+from rich.console import Console
+from rich.markdown import Markdown
 from recipebook_functions import add_recipe, modify_recipe, delete_recipe, current_recipes, search_recipes, export_recipe
 # Pep 8 guide states imports should go 1. Standard library imports, 2. Related third party imports, 3. Local application/ library specific imports
 
-print("Welcome to Your Recipe Book!\n\n ༼ つ ◕_◕ ༽つ🍰🍔🍕\n")
+MARKDOWN = """
+# Welcome to Your Recipe Book!
+"""
+console = Console()
+md = Markdown(MARKDOWN)
+console.print(md)
 
 def option_menu():
     while True:

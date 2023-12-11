@@ -92,6 +92,8 @@ def modify_recipe():
 
     print(f"\nRecipe has been successfully updated.")
 
+# Delete a recipe
+
 def delete_recipe():
     categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
     
@@ -121,6 +123,8 @@ def delete_recipe():
 
     db.table(category).remove(Query().recipe_name == selected_recipe["recipe_name"])
     print(f"{selected_recipe['recipe_name']} has been deleted.")
+
+# View current recipes
 
 def current_recipes():
     categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
@@ -161,7 +165,7 @@ def search_recipes():
         print("Search canceled.")
         return
     
-    # Haven't figured out the search function yet
+    # Haven't figured out search method yet
 
     print(f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
