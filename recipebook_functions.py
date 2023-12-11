@@ -83,11 +83,11 @@ def modify_recipe():
     new_value = inquirer.text(message=f"Enter the new {item_to_modify.lower()}:").execute()
 
     if item_to_modify == "Name":
-        db.table(category).upsert({"recipe_name": new_value}, Query()["recipe_name"] == selected_recipe["recipe_name"])
+        db.table(category).update({"recipe_name": new_value}, Query()["recipe_name"] == selected_recipe["recipe_name"])
     elif item_to_modify == "Ingredients":
-        db.table(category).upsert({"ingredients": new_value}, Query()["ingredients"] == selected_recipe["ingredients"])
+        db.table(category).update({"ingredients": new_value}, Query()["ingredients"] == selected_recipe["ingredients"])
     elif item_to_modify == "Method":
-        db.table(category).upsert({"method": new_value}, Query()["method"] == selected_recipe["method"])   
+        db.table(category).update({"method": new_value}, Query()["method"] == selected_recipe["method"])   
 
     print(f"\nRecipe has been successfully updated.")
 
