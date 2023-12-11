@@ -13,7 +13,7 @@ def add_recipe():
     category = inquirer.rawlist(
             message = "Select a category or 'Exit' to cancel",
             choices = categories
-        ).execute()
+    ).execute()
     
     if category == "Exit":
         print("Selection canceled.")
@@ -41,7 +41,16 @@ if __name__ == "__main__":
     add_recipe()    
 
 def modify_recipe():
-    pass 
+    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    
+    category = inquirer.rawlist(
+        message="Select a category to modify a recipe:",
+        choices=categories
+    ).execute() 
+
+    if category == "Exit":
+        print("Selection canceled.")
+        return
 
 def delete_recipe():
     pass

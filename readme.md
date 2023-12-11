@@ -64,4 +64,10 @@ I have provided detailed screenshots below.
 
 - inquirerpy.readthedocs.io. (n.d.). rawlist - InquirerPy. [online] Available at: https://inquirerpy.readthedocs.io/en/latest/pages/prompts/rawlist.html [Accessed 11 Dec. 2023].
 
-‌
+- www.tutorialspoint.com. (n.d.). TinyDB - Tables. [online] Available at: https://www.tutorialspoint.com/tinydb/tinydb_tables.htm [Accessed 11 Dec. 2023].
+
+- inquirerpy.readthedocs.io. (n.d.). text - InquirerPy. [online] Available at: https://inquirerpy.readthedocs.io/en/latest/pages/prompts/input.html [Accessed 11 Dec. 2023].
+
+- tinydb.readthedocs.io. (n.d.). Getting Started — TinyDB 4.8.0 documentation. [online] Available at: https://tinydb.readthedocs.io/en/latest/getting-started.html#basic-usage [Accessed 11 Dec. 2023].
+
+‌‌

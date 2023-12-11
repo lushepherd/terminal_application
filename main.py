@@ -20,7 +20,7 @@ def option_menu():
 
         action = inquirer.rawlist(
             message="Please select an option from the menu:",
-            choices=choices
+            choices = choices
         ).execute()
 
         if action == "Exit":
