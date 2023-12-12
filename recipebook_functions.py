@@ -190,6 +190,9 @@ def search_recipes():
         choices=recipe_choices + [Choice(value=None, name="Exit")],
     ).execute()
 
+    if selected_recipe_index is None:
+        return
+
     selected_recipe = matching_recipes[selected_recipe_index]
 
     print(f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
