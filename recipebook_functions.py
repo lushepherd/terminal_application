@@ -20,11 +20,27 @@ def add_recipe():
         print("Selection canceled.")
         return
     
-    recipe_name = inquirer.text(message="Enter the recipe name:").execute()
+    recipe_name = inquirer.text(
+        message="Enter the recipe name or 'exit' to cancel:",
+        validate=lambda result: len(result) > 0,
+        invalid_message="Input cannot be empty."
+    ).execute()
 
-    ingredients = inquirer.text(message="Enter the ingredients separated by commas:").execute().split(',')
+    if recipe_name == 'exit'.lower():
+        print("Recipe add canceled.")
+        return
 
-    method = inquirer.text(message="Enter the method:").execute()
+    ingredients = inquirer.text(
+        message="Enter the ingredients separated by commas:",
+        validate=lambda result: len(result) > 0,
+        invalid_message="Input cannot be empty."
+    ).execute().split(',')
+
+    method = inquirer.text(
+        message="Enter the method:",
+        validate=lambda result: len(result) > 0,
+        invalid_message="Input cannot be empty."
+    ).execute()
 
     recipe_data = {
             "recipe_category": category,
@@ -155,6 +171,9 @@ def current_recipes():
 
     print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
+if __name__ == "__main__":
+    current_recipes() 
+
 def search_recipes():
     
     search_term = inquirer.text(
@@ -164,17 +183,6 @@ def search_recipes():
     if search_term == 'exit'.lower():
         print("Search canceled.")
         return
-    
-    # Haven't figured out search method yet
-
-    # Example 1
-    # from python.hotexamples.com
-
-    # run_ids = []
-    # for run in runs:
-    #     if 'notes' in run.keys():
-    #         run['notes'] = str(escape(run['notes']))
-    #     run_ids.append(run.eid)
 
     all_recipes = []
     for category in db.tables():
