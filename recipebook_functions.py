@@ -9,7 +9,7 @@ from fpdf import FPDF
 db = TinyDB("recipes_db.json")
 
 def add_recipe():
-    categories = ["Breakfast 🥓 🥐", "Lunch 🥪 🥖", "Dinner 🥗 🍔", "Snacks 🧁 🥨", "Dessert 🍰 🍨", "Exit"]
+    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
 
     category = inquirer.rawlist(
             message = "Select a category or 'Exit' to cancel",
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 # Modify a current recipe
 
 def modify_recipe():
-    categories = ["Breakfast 🥓", "Lunch 🥪🥖", "Dinner 🥗🍔", "Snacks 🧁🥨", "Dessert 🍰🍨", "Exit"]
+    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
     
     category = inquirer.rawlist(
         message="Select a category to modify a recipe:",
@@ -95,7 +95,7 @@ def modify_recipe():
 # Delete a recipe
 
 def delete_recipe():
-    categories = ["Breakfast 🥓🥐", "Lunch 🥪🥖", "Dinner 🥗🍔", "Snacks 🧁🥨", "Dessert 🍰🍨", "Exit"]
+    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
     
     category = inquirer.rawlist(
         message="Select a category to delete a recipe:",
@@ -127,7 +127,7 @@ def delete_recipe():
 # View current recipes
 
 def current_recipes():
-    categories = ["Breakfast 🥓🥐", "Lunch 🥪🥖", "Dinner 🥗🍔", "Snacks 🧁🥨", "Dessert 🍰🍨", "Exit"]
+    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
     
     category = inquirer.rawlist(
         message="Select a category to view:",
@@ -167,6 +167,31 @@ def search_recipes():
     
     # Haven't figured out search method yet
 
+    # Example 1
+    # from python.hotexamples.com
+
+    # run_ids = []
+    # for run in runs:
+    #     if 'notes' in run.keys():
+    #         run['notes'] = str(escape(run['notes']))
+    #     run_ids.append(run.eid)
+
+    all_recipes = []
+    for category in db.tables():
+        category_recipes = db.table(category).all()
+        all_recipes.extend(category_recipes)
+
+    matching_recipes = [recipe for recipe in all_recipes if search_term in recipe["recipe_name"].lower() or any(search_term in ingredient.lower() for ingredient in recipe["ingredients"])]    
+
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(matching_recipes)]
+
+    selected_recipe_index = inquirer.select(
+        message=f"Select a recipe from the search results (search term: {search_term}):",
+        choices=recipe_choices + [Choice(value=None, name="Exit")],
+    ).execute()
+
+    selected_recipe = matching_recipes[selected_recipe_index]
+
     print(f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
 class PDF(FPDF):
@@ -194,7 +219,7 @@ def export_to_pdf(recipe):
     pdf.output(f"{recipe['recipe_name']}_recipe.pdf")        
 
 def export_recipe():
-    categories = ["Breakfast 🥓🥐", "Lunch 🥪🥖", "Dinner 🥗🍔", "Snacks 🧁🥨", "Dessert 🍰🍨", "Exit"]
+    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
     
     category = inquirer.rawlist(
         message="Select a category to view:",
