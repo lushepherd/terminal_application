@@ -66,20 +66,12 @@ def add_recipe():
             "ingredients": ingredients,
             "method": method,
         }
-
-        print("Recipe added successfully!")
-
-        recipe_data = {
-                "recipe_category": category,
-                "recipe_name": recipe_name,
-                "ingredients": ingredients,
-                "method": method,
-            }
         
-        category_db = db.table(category)
+        category_db = db.table(user_choice)
         category_db.insert(recipe_data)
 
         print("Recipe added successfully!")
+        return
 
 if __name__ == "__main__":
     add_recipe()  
