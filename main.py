@@ -5,6 +5,14 @@ from InquirerPy import prompt
 from recipebook_functions import add_recipe, modify_recipe, delete_recipe, current_recipes, search_recipes, export_recipe
 # Pep 8 guide states imports should go 1. Standard library imports, 2. Related third party imports, 3. Local application/ library specific imports
 
+"""
+Your Recipe Book
+
+A terminal application that allows the user to create and manage a recipe book.
+They can add, modify, delete, browse, search, and export recipes to PDF.
+
+"""
+
 MARKDOWN = """
 # 🥗 🍔 Welcome to Your Recipe Book! 🍰 🍨
 """
@@ -13,6 +21,13 @@ md = Markdown(MARKDOWN)
 console.print(md)
 
 def option_menu():
+    """
+    The main menu that handles user interaction.
+
+    Continually prompts the user for input until they choose to exit.
+    Calls the corresponding function based on the user's selection.
+    """
+
     while True:
         choices = [
             "➕ Add a new recipe",
