@@ -1,9 +1,8 @@
 from InquirerPy import inquirer
 from rich.console import Console
 from rich import print
-from rich.style import Style as RichStyle
+from rich.style import Style
 from rich.markdown import Markdown
-from InquirerPy import prompt
 from recipebook_functions import add_recipe, modify_recipe, delete_recipe, current_recipes, search_recipes, export_recipe
 # Pep 8 guide states imports should go 1. Standard library imports, 2. Related third party imports, 3. Local application/ library specific imports
 
@@ -28,7 +27,7 @@ def option_menu():
     Continually prompts the user for input until they choose to exit.
     Calls the corresponding function based on the user's selection.
     """
-
+    menu_item_style = Style(bgcolor="cornsilk1", color="dark_orange")
     while True:
         choices = [
             "➕ Add a new recipe",
@@ -39,15 +38,24 @@ def option_menu():
             "📄 Export to PDF",
             "Exit",
         ]
-
+        
         action = inquirer.rawlist(
             message="Please select an option from the menu:",
             choices = choices
         ).execute()
 
         if action == "Exit":
-            print("\nThank you for using Your Recipe Book!")
-            print("\n༼ つ ◕_◕ ༽つ🍰🍔🍕\n")
+            MARKDOWN = """
+            Thank you for using Your Recipe Book!
+
+            ༼ つ ◕_◕ ༽つ🍰🍔🍕
+
+            Github: https://github.com/lushepherd
+            Linkedin: https://www.linkedin.com/in/lucy-shepherd-44236928a/
+            """
+            console = Console()
+            md = Markdown(MARKDOWN)
+            console.print(md)
             break
 
         if action:

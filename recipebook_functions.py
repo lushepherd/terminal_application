@@ -25,39 +25,61 @@ def add_recipe():
         print("Selection canceled.")
         return
     
-    recipe_name = inquirer.text(
-        message="Enter the recipe name or 'exit' to cancel:",
-        validate=lambda result: len(result) > 0,
-        invalid_message="Input cannot be empty."
-    ).execute()
+    exit_flag = False
 
-    if recipe_name == 'exit'.lower():
-        print("Recipe add canceled.")
-        return
+    while not exit_flag:
+        recipe_name = inquirer.text(
+            message="Enter the recipe name or 'exit' to cancel:",
+            validate=lambda result: len(result) > 0,
+            invalid_message="Input cannot be empty."
+        ).execute()
 
-    ingredients = inquirer.text(
-        message="Enter the ingredients separated by commas:",
-        validate=lambda result: len(result) > 0,
-        invalid_message="Input cannot be empty."
-    ).execute().split(',')
+        if recipe_name.lower() == 'exit':
+            print("Recipe add canceled.")
+            exit_flag = True
+            break
 
-    method = inquirer.text(
-        message="Enter the method:",
-        validate=lambda result: len(result) > 0,
-        invalid_message="Input cannot be empty."
-    ).execute()
+        ingredients = inquirer.text(
+            message="Enter the ingredients separated by commas:",
+            validate=lambda result: len(result) > 0,
+            invalid_message="Input cannot be empty."
+        ).execute().split(',')
 
-    recipe_data = {
-            "recipe_category": category,
+        if 'exit' in ingredients:
+            print("Recipe add canceled.")
+            exit_flag = True
+            break
+
+        method = inquirer.text(
+            message="Enter the method:",
+            validate=lambda result: len(result) > 0,
+            invalid_message="Input cannot be empty."
+        ).execute()
+
+        if method.lower() == 'exit':
+            print("Recipe add canceled.")
+            exit_flag = True
+            break
+
+        recipe_data = {
             "recipe_name": recipe_name,
             "ingredients": ingredients,
             "method": method,
         }
-    
-    category_db = db.table(category)
-    category_db.insert(recipe_data)
 
-    print("Recipe added successfully!")
+        print("Recipe added successfully!")
+
+        recipe_data = {
+                "recipe_category": category,
+                "recipe_name": recipe_name,
+                "ingredients": ingredients,
+                "method": method,
+            }
+        
+        category_db = db.table(category)
+        category_db.insert(recipe_data)
+
+        print("Recipe added successfully!")
 
 if __name__ == "__main__":
     add_recipe()  
