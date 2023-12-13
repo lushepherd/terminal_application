@@ -9,6 +9,12 @@ from fpdf import FPDF
 db = TinyDB("recipes_db.json")
 
 def add_recipe():
+    """
+    This function allows the user to add a new recipe to a category of their choosing.
+    
+    After selecting a category, they are prompted to enter a recipe name, ingredients and a method.
+    This recipe is then added to the database under the category.
+    """
     categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
 
     category = inquirer.rawlist(
@@ -60,6 +66,12 @@ if __name__ == "__main__":
 # Modify a current recipe
 
 def modify_recipe():
+    """
+    This function allows the user to modify a recipe already in the database.
+    
+    They are prompted to select a category then select a recipe to modify, then choose which
+    part of the recipe to modify (name, ingredients, method.)
+    """
     categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
     
     category = inquirer.rawlist(
@@ -111,6 +123,11 @@ def modify_recipe():
 # Delete a recipe
 
 def delete_recipe():
+    """
+    This function allows a user to delete a recipe already in the database.
+
+    They are prompted to select a category, then a recipe to delete.
+    """
     categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
     
     category = inquirer.rawlist(
@@ -143,6 +160,12 @@ def delete_recipe():
 # View current recipes
 
 def current_recipes():
+    """
+    This function allows the user to browse the current list of recipes in the database.
+
+    They are prompted to select a category, then they can select a recipe to view.
+    Displays the recipes name, ingredients and method.
+    """
     categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
     
     category = inquirer.rawlist(
@@ -175,6 +198,12 @@ if __name__ == "__main__":
     current_recipes() 
 
 def search_recipes():
+    """
+    This function allows the user to search for recipes in the database by name or ingredient.
+
+    They are prompted to enter their search term and then shown a list of recipes that match
+    that they can choose from.
+    """
     
     search_term = inquirer.text(
         message="Enter a recipe name or ingredient to search or type 'exit' to cancel:"
@@ -206,6 +235,11 @@ def search_recipes():
     print(f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
 class PDF(FPDF):
+    """
+    PDF class for exporting to PDF format.
+    
+    Inherits from FPDF and provides a template/format for the recipe to display.
+    """
     def header(self):
         image_path = "images/logo.png"
         self.image(image_path, 10, 8, 33)
@@ -230,6 +264,12 @@ def export_to_pdf(recipe):
     pdf.output(f"{recipe['recipe_name']}_recipe.pdf")        
 
 def export_recipe():
+    """
+    Allows user to export a recipe to PDF.
+
+    They are prompted to select a category and then a recipe to export.
+    Creates a PDF file with the details of the selected recipe.
+    """
     categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
     
     category = inquirer.rawlist(
