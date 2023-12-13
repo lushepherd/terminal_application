@@ -76,4 +76,13 @@ I have provided detailed screenshots below.
 
 - pyfpdf.readthedocs.io. (n.d.). Tutorial - PyFPDF. [online] Available at: https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html#tutorial [Accessed 11 Dec. 2023].
 
+- Stack Overflow. (n.d.). Trying to create a function to search for a word in a string. [online] Available at: https://stackoverflow.com/questions/69509917/trying-to-create-a-function-to-search-for-a-word-in-a-string [Accessed 12 Dec. 2023].
+
+- Stack Overflow. (n.d.). How to make a search function case in-sensitive | Python. [online] Available at: https://stackoverflow.com/questions/47251439/how-to-make-a-search-function-case-in-sensitive-python [Accessed 12 Dec. 2023].
+
+- Stack Overflow. (n.d.). Is it possible to ask for keys from TinyDB. [online] Available at: https://stackoverflow.com/questions/27197052/is-it-possible-to-ask-for-keys-from-tinydb [Accessed 12 Dec. 2023].
+
+- python.hotexamples.com. (n.d.). Python TinyDB Examples, tinydb.TinyDB Python Examples - HotExamples. [online] Available at: https://python.hotexamples.com/examples/tinydb/TinyDB/-/python-tinydb-class-examples.html [Accessed 12 Dec. 2023].
+
+‌
 ‌

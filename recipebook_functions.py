@@ -102,14 +102,16 @@ def modify_recipe():
         print(f"No recipes found in the {category} category.")
         return
 
-    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(category_recipes)]
+    sorted_recipes = sorted(category_recipes, key=lambda x: x["recipe_name"].lower())
+
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(sorted_recipes)]
 
     selected_recipe_index = inquirer.select(
         message="Select a recipe to modify:",
         choices=recipe_choices
     ).execute()
 
-    selected_recipe = category_recipes[selected_recipe_index]
+    selected_recipe = sorted_recipes[selected_recipe_index]
 
     print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
@@ -132,6 +134,9 @@ def modify_recipe():
         db.table(category).update({"method": new_value}, Query()["method"] == selected_recipe["method"])   
 
     print(f"\nRecipe has been successfully updated.")
+
+if __name__ == "__main__":
+    modify_recipe()     
 
 # Delete a recipe
 
@@ -158,17 +163,22 @@ def delete_recipe():
         print(f"No recipes found in the {category} category.")
         return
 
-    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(category_recipes)]
+    sorted_recipes = sorted(category_recipes, key=lambda x: x["recipe_name"].lower())
+
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(sorted_recipes)]
 
     selected_recipe_index = inquirer.select(
         message="Select a recipe to delete:",
         choices=recipe_choices
     ).execute()
 
-    selected_recipe = category_recipes[selected_recipe_index]
+    selected_recipe = sorted_recipes[selected_recipe_index]
 
     db.table(category).remove(Query().recipe_name == selected_recipe["recipe_name"])
     print(f"{selected_recipe['recipe_name']} has been deleted.")
+
+if __name__ == "__main__":
+    delete_recipe()     
 
 # View current recipes
 
@@ -196,14 +206,16 @@ def current_recipes():
         print(f"No recipes found in the {category} category.")
         return
 
-    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(category_recipes)]
+    sorted_recipes = sorted(category_recipes, key=lambda x: x["recipe_name"].lower())
+
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(sorted_recipes)]
 
     selected_recipe_index = inquirer.select(
         message="Select a recipe to view:",
         choices=recipe_choices
     ).execute()
 
-    selected_recipe = category_recipes[selected_recipe_index]
+    selected_recipe = sorted_recipes[selected_recipe_index]
 
     print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
@@ -233,7 +245,9 @@ def search_recipes():
 
     matching_recipes = [recipe for recipe in all_recipes if search_term in recipe["recipe_name"].lower() or any(search_term in ingredient.lower() for ingredient in recipe["ingredients"])]    
 
-    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(matching_recipes)]
+    sorted_recipes = sorted(matching_recipes, key=lambda x: x["recipe_name"].lower())
+
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(sorted_recipes)]
 
     selected_recipe_index = inquirer.select(
         message=f"Select a recipe from the search results (search term: {search_term}):",
@@ -243,9 +257,12 @@ def search_recipes():
     if selected_recipe_index is None:
         return
 
-    selected_recipe = matching_recipes[selected_recipe_index]
+    selected_recipe = sorted_recipes[selected_recipe_index]
 
     print(f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
+
+if __name__ == "__main__":
+    search_recipes() 
 
 class PDF(FPDF):
     """
@@ -315,4 +332,4 @@ def export_recipe():
     print(f"Recipe '{selected_recipe['recipe_name']}' exported to PDF.")
 
 if __name__ == "__main__":
-    export_recipe(option_menu) 
+    export_recipe() 
