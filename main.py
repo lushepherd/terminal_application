@@ -1,5 +1,7 @@
 from InquirerPy import inquirer
 from rich.console import Console
+from rich import print
+from rich.style import Style as RichStyle
 from rich.markdown import Markdown
 from InquirerPy import prompt
 from recipebook_functions import add_recipe, modify_recipe, delete_recipe, current_recipes, search_recipes, export_recipe
@@ -12,13 +14,12 @@ A terminal application that allows the user to create and manage a recipe book.
 They can add, modify, delete, browse, search, and export recipes to PDF.
 
 """
-
 MARKDOWN = """
 # 🥗 🍔 Welcome to Your Recipe Book! 🍰 🍨
 """
 console = Console()
 md = Markdown(MARKDOWN)
-console.print(md)
+console.print(md, style="cornsilk1 on dark_sea_green3")
 
 def option_menu():
     """
@@ -38,7 +39,7 @@ def option_menu():
             "📄 Export to PDF",
             "Exit",
         ]
-            
+
         action = inquirer.rawlist(
             message="Please select an option from the menu:",
             choices = choices

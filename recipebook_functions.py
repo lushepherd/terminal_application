@@ -15,14 +15,13 @@ def add_recipe():
     After selecting a category, they are prompted to enter a recipe name, ingredients and a method.
     This recipe is then added to the database under the category.
     """
-    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
 
-    category = inquirer.rawlist(
+    user_choice = inquirer.rawlist(
             message = "Select a category or 'Exit' to cancel",
-            choices = categories
+            choices = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
     ).execute()
     
-    if category == "Exit":
+    if user_choice == "Exit":
         print("Selection canceled.")
         return
     
