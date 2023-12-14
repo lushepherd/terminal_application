@@ -48,6 +48,35 @@ def select_recipe(category, db):
 
     return sorted_recipes[selected_recipe_index] if selected_recipe_index is not None else None
 
+# Get recipe details before add function
+
+def get_recipe_details():
+    recipe_name = input_text("Enter the recipe name or 'exit' to cancel:", lambda result: len(result) > 0)
+
+    if recipe_name.lower() == 'exit':
+        print("Recipe add canceled.")
+        return None
+
+    ingredients = input_text("Enter the ingredients separated by commas:", lambda result: len(result) > 0).split(',')
+
+    if 'exit' in ingredients:
+        print("Recipe add canceled.")
+        return None
+
+    method = input_text("Enter the method:", lambda result: len(result) > 0)
+
+    if method.lower() == 'exit':
+        print("Recipe add canceled.")
+        return None
+
+    return {
+        "recipe_name": recipe_name,
+        "ingredients": ingredients,
+        "method": method,
+    }
+
+# Add recipe 
+
 def add_recipe():
     """
     This function allows the user to add a new recipe to a category of their choosing.
@@ -55,48 +84,18 @@ def add_recipe():
     After selecting a category, they are prompted to enter a recipe name, ingredients and a method.
     This recipe is then added to the database under the category.
     """
-
     category = select_category()
 
     if category is None:
         print("Recipe add canceled.")
         return
 
-    exit_flag = False
+    recipe_data = get_recipe_details()
 
-    while not exit_flag:
-        recipe_name = input_text("Enter the recipe name or 'exit' to cancel:", lambda result: len(result) > 0)
-
-        if recipe_name.lower() == 'exit':
-            print("Recipe add canceled.")
-            exit_flag = True
-            return
-
-        ingredients = input_text("Enter the ingredients separated by commas:", lambda result: len(result) > 0).split(',')
-
-        if 'exit' in ingredients:
-            print("Recipe add canceled.")
-            exit_flag = True
-            return
-
-        method = input_text("Enter the method:", lambda result: len(result) > 0)
-
-        if method.lower() == 'exit':
-            print("Recipe add canceled.")
-            exit_flag = True
-            return
-
-        recipe_data = {
-            "recipe_name": recipe_name,
-            "ingredients": ingredients,
-            "method": method,
-        }
-
+    if recipe_data is not None:
         category_db = db.table(category)
         category_db.insert(recipe_data)
-
         print("Recipe added successfully!")
-        return
 
 if __name__ == "__main__":
     add_recipe()
@@ -151,7 +150,7 @@ def delete_recipe():
     category = select_category()
 
     if category is None:
-        print("Delete recipe canceled.")
+        print("Recipe delete canceled.")
         return
     
     selected_recipe = select_recipe(category, db)
@@ -175,7 +174,7 @@ def view_recipes():
     category = select_category()
 
     if category is None: 
-        print("View recipe canceled.")
+        print("Recipe view canceled.")
         return
     
     selected_recipe = select_recipe(category, db)
@@ -184,7 +183,7 @@ def view_recipes():
         print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
 if __name__ == "__main__":
-    view_recipes(db)
+    view_recipes()
 
 def search_recipes():
     """
@@ -199,7 +198,7 @@ def search_recipes():
     ).execute().lower()
 
     if search_term == 'exit'.lower():
-        print("Search canceled.")
+        print("Recipe search canceled.")
         return
 
     all_recipes = []
