@@ -10,10 +10,16 @@ db = TinyDB("recipes_db.json")
 
 def select_category():
     categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
-    return inquirer.rawlist(
+    selected_category = inquirer.rawlist(
         message="Select a category or 'Exit' to cancel",
         choices=categories
     ).execute()
+
+    if selected_category == "Exit":
+        print("Selection canceled.")
+        return None
+
+    return selected_category
 
 def validate_input(result):
     return len(result) > 0
@@ -52,10 +58,6 @@ def add_recipe():
     """
 
     category = select_category()
-
-    if category == "Exit":
-        print("Selection canceled.")
-        return
 
     exit_flag = False
 
@@ -106,10 +108,6 @@ def modify_recipe():
     part of the recipe to modify (name, ingredients, method.)
     """
     category = select_category()
-
-    if category == "Exit":
-        print("Selection canceled.")
-        return
     
     selected_recipe = select_recipe(category, db)
 
@@ -143,36 +141,13 @@ def delete_recipe():
 
     They are prompted to select a category, then a recipe to delete.
     """
-    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    category = select_category()
     
-    category = inquirer.rawlist(
-        message="Select a category to delete a recipe:",
-        choices = categories
-    ).execute() 
+    selected_recipe = select_recipe(category, db)
 
-    if category == "Exit":
-        print("Selection canceled.")
-        return
-    
-    category_recipes = db.table(category).all()
-
-    if not category_recipes:
-        print(f"No recipes found in the {category} category.")
-        return
-
-    sorted_recipes = sorted(category_recipes, key=lambda x: x["recipe_name"].lower())
-
-    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(sorted_recipes)]
-
-    selected_recipe_index = inquirer.select(
-        message="Select a recipe to delete:",
-        choices=recipe_choices
-    ).execute()
-
-    selected_recipe = sorted_recipes[selected_recipe_index]
-
-    db.table(category).remove(Query().recipe_name == selected_recipe["recipe_name"])
-    print(f"{selected_recipe['recipe_name']} has been deleted.")
+    if selected_recipe:
+        db.table(category).remove(Query().recipe_name == selected_recipe["recipe_name"])
+        print(f"{selected_recipe['recipe_name']} has been deleted.")
 
 if __name__ == "__main__":
     delete_recipe()     
@@ -186,38 +161,15 @@ def view_recipes():
     They are prompted to select a category, then they can select a recipe to view.
     Displays the recipes name, ingredients and method.
     """
-    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    category = select_category()
     
-    category = inquirer.rawlist(
-        message="Select a category to view:",
-        choices = categories
-    ).execute() 
+    selected_recipe = select_recipe(category, db)
 
-    if category == "Exit":
-        print("Selection canceled.")
-        return
-    
-    category_recipes = db.table(category).all()
-
-    if not category_recipes:
-        print(f"No recipes found in the {category} category.")
-        return
-
-    sorted_recipes = sorted(category_recipes, key=lambda x: x["recipe_name"].lower())
-
-    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(sorted_recipes)]
-
-    selected_recipe_index = inquirer.select(
-        message="Select a recipe to view:",
-        choices=recipe_choices
-    ).execute()
-
-    selected_recipe = sorted_recipes[selected_recipe_index]
-
-    print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
+    if selected_recipe:
+        print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
 if __name__ == "__main__":
-    view_recipes() 
+    view_recipes(db)
 
 def search_recipes():
     """
@@ -296,37 +248,17 @@ def export_recipe():
 
     They are prompted to select a category and then a recipe to export.
     Creates a PDF file with the details of the selected recipe.
-    """
-    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
-    
-    category = inquirer.rawlist(
-        message="Select a category to view:",
-        choices = categories
-    ).execute() 
+    """ 
+    category = select_category()
 
-    if category == "Exit":
-        print("Selection canceled.")
-        return
-    
-    category_recipes = db.table(category).all()
+    if category is None:
+        return  # Exit early if the category is empty
 
-    if not category_recipes:
-        print(f"No recipes found in the {category} category.")
-        return
+    selected_recipe = select_recipe(category, db)
 
-    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(category_recipes)]
-
-    selected_recipe_index = inquirer.select(
-        message="Select a recipe to view:",
-        choices=recipe_choices
-    ).execute()
-
-    selected_recipe = category_recipes[selected_recipe_index]
-
-    print(f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
-
-    export_to_pdf(selected_recipe)
-    print(f"Recipe '{selected_recipe['recipe_name']}' exported to PDF.")
+    if selected_recipe is not None:
+        export_to_pdf(selected_recipe)
+        print(f"Recipe '{selected_recipe['recipe_name']}' successfully exported to PDF.")
 
 if __name__ == "__main__":
-    export_recipe() 
+    export_recipe()
