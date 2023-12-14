@@ -16,7 +16,6 @@ def select_category():
     ).execute()
 
     if selected_category == "Exit":
-        print("Selection canceled.")
         return None
 
     return selected_category
@@ -58,6 +57,10 @@ def add_recipe():
     """
 
     category = select_category()
+
+    if category is None:
+        print("Recipe add canceled.")
+        return
 
     exit_flag = False
 
@@ -108,6 +111,10 @@ def modify_recipe():
     part of the recipe to modify (name, ingredients, method.)
     """
     category = select_category()
+
+    if category is None:
+        print("Recipe modify canceled.")
+        return
     
     selected_recipe = select_recipe(category, db)
 
@@ -142,6 +149,10 @@ def delete_recipe():
     They are prompted to select a category, then a recipe to delete.
     """
     category = select_category()
+
+    if category is None:
+        print("Delete recipe canceled.")
+        return
     
     selected_recipe = select_recipe(category, db)
 
@@ -162,6 +173,10 @@ def view_recipes():
     Displays the recipes name, ingredients and method.
     """
     category = select_category()
+
+    if category is None: 
+        print("View recipe canceled.")
+        return
     
     selected_recipe = select_recipe(category, db)
 
@@ -252,7 +267,8 @@ def export_recipe():
     category = select_category()
 
     if category is None:
-        return  # Exit early if the category is empty
+        print("Recipe export canceled.")
+        return
 
     selected_recipe = select_recipe(category, db)
 
