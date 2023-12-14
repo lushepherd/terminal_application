@@ -3,7 +3,7 @@ from rich.console import Console
 from rich import print
 from rich.style import Style
 from rich.markdown import Markdown
-from recipebook_functions import add_recipe, modify_recipe, delete_recipe, current_recipes, search_recipes, export_recipe
+from recipebook_functions import add_recipe, modify_recipe, delete_recipe, view_recipes, search_recipes, export_recipe
 # Pep 8 guide states imports should go 1. Standard library imports, 2. Related third party imports, 3. Local application/ library specific imports
 
 """
@@ -67,7 +67,7 @@ def option_menu():
             elif users_selection == 3:
                 delete_recipe()
             elif users_selection == 4:
-                current_recipes()
+                view_recipes()
             elif users_selection == 5:
                 search_recipes()
             elif users_selection == 6:

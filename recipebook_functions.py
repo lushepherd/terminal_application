@@ -8,6 +8,41 @@ from fpdf import FPDF
 
 db = TinyDB("recipes_db.json")
 
+def select_category():
+    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
+    return inquirer.rawlist(
+        message="Select a category or 'Exit' to cancel",
+        choices=categories
+    ).execute()
+
+def validate_input(result):
+    return len(result) > 0
+
+def input_text(message, validate):
+    return inquirer.text(
+        message=message,
+        validate=validate,
+        invalid_message="Input cannot be empty."
+    ).execute()
+
+def select_recipe(category, db):
+    category_recipes = db.table(category).all()
+
+    if not category_recipes:
+        print(f"No recipes found in the {category} category.")
+        return None
+
+    sorted_recipes = sorted(category_recipes, key=lambda x: x["recipe_name"].lower())
+
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(sorted_recipes)]
+
+    selected_recipe_index = inquirer.select(
+        message="Select a recipe:",
+        choices=recipe_choices
+    ).execute()
+
+    return sorted_recipes[selected_recipe_index] if selected_recipe_index is not None else None
+
 def add_recipe():
     """
     This function allows the user to add a new recipe to a category of their choosing.
@@ -16,65 +51,50 @@ def add_recipe():
     This recipe is then added to the database under the category.
     """
 
-    user_choice = inquirer.rawlist(
-            message = "Select a category or 'Exit' to cancel",
-            choices = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
-    ).execute()
-    
-    if user_choice == "Exit":
+    category = select_category()
+
+    if category == "Exit":
         print("Selection canceled.")
         return
-    
+
     exit_flag = False
 
     while not exit_flag:
-        recipe_name = inquirer.text(
-            message="Enter the recipe name or 'exit' to cancel:",
-            validate=lambda result: len(result) > 0,
-            invalid_message="Input cannot be empty."
-        ).execute()
+        recipe_name = input_text("Enter the recipe name or 'exit' to cancel:", lambda result: len(result) > 0)
 
         if recipe_name.lower() == 'exit':
             print("Recipe add canceled.")
             exit_flag = True
-            break
+            return
 
-        ingredients = inquirer.text(
-            message="Enter the ingredients separated by commas:",
-            validate=lambda result: len(result) > 0,
-            invalid_message="Input cannot be empty."
-        ).execute().split(',')
+        ingredients = input_text("Enter the ingredients separated by commas:", lambda result: len(result) > 0).split(',')
 
         if 'exit' in ingredients:
             print("Recipe add canceled.")
             exit_flag = True
-            break
+            return
 
-        method = inquirer.text(
-            message="Enter the method:",
-            validate=lambda result: len(result) > 0,
-            invalid_message="Input cannot be empty."
-        ).execute()
+        method = input_text("Enter the method:", lambda result: len(result) > 0)
 
         if method.lower() == 'exit':
             print("Recipe add canceled.")
             exit_flag = True
-            break
+            return
 
         recipe_data = {
             "recipe_name": recipe_name,
             "ingredients": ingredients,
             "method": method,
         }
-        
-        category_db = db.table(user_choice)
+
+        category_db = db.table(category)
         category_db.insert(recipe_data)
 
         print("Recipe added successfully!")
         return
 
 if __name__ == "__main__":
-    add_recipe()  
+    add_recipe()
 
 # Modify a current recipe
 
@@ -85,55 +105,32 @@ def modify_recipe():
     They are prompted to select a category then select a recipe to modify, then choose which
     part of the recipe to modify (name, ingredients, method.)
     """
-    categories = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert", "Exit"]
-    
-    category = inquirer.rawlist(
-        message="Select a category to modify a recipe:",
-        choices = categories
-    ).execute() 
+    category = select_category()
 
     if category == "Exit":
         print("Selection canceled.")
         return
     
-    category_recipes = db.table(category).all()
+    selected_recipe = select_recipe(category, db)
 
-    if not category_recipes:
-        print(f"No recipes found in the {category} category.")
-        return
+    if selected_recipe:
+        print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
-    sorted_recipes = sorted(category_recipes, key=lambda x: x["recipe_name"].lower())
+        item_to_modify = inquirer.select(
+            message="Select the item to modify:",
+            choices=["Name", "Ingredients", "Method"]
+        ).execute()
 
-    recipe_choices = [Choice(value=index, name=recipe["recipe_name"]) for index, recipe in enumerate(sorted_recipes)]
+        new_value = inquirer.text(message=f"Enter the new {item_to_modify.lower()}:").execute()
 
-    selected_recipe_index = inquirer.select(
-        message="Select a recipe to modify:",
-        choices=recipe_choices
-    ).execute()
+        if item_to_modify == "Name":
+            db.table(category).update({"recipe_name": new_value}, Query()["recipe_name"] == selected_recipe["recipe_name"])
+        elif item_to_modify == "Ingredients":
+            db.table(category).update({"ingredients": new_value}, Query()["ingredients"] == selected_recipe["ingredients"])
+        elif item_to_modify == "Method":
+            db.table(category).update({"method": new_value}, Query()["method"] == selected_recipe["method"])
 
-    selected_recipe = sorted_recipes[selected_recipe_index]
-
-    print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
-
-    item_to_modify = inquirer.select(
-        message="Select the item to modify:",
-        choices=[
-            "Name", 
-            "Ingredients", 
-            "Method"
-    ]
-    ).execute()
-
-    new_value = inquirer.text(message=f"Enter the new {item_to_modify.lower()}:").execute()
-
-    if item_to_modify == "Name":
-        db.table(category).update({"recipe_name": new_value}, Query()["recipe_name"] == selected_recipe["recipe_name"])
-    elif item_to_modify == "Ingredients":
-        db.table(category).update({"ingredients": new_value}, Query()["ingredients"] == selected_recipe["ingredients"])
-    elif item_to_modify == "Method":
-        db.table(category).update({"method": new_value}, Query()["method"] == selected_recipe["method"])   
-
-    print(f"\nRecipe has been successfully updated.")
+        print(f"\nRecipe has been successfully updated.")
 
 if __name__ == "__main__":
     modify_recipe()     
@@ -182,7 +179,7 @@ if __name__ == "__main__":
 
 # View current recipes
 
-def current_recipes():
+def view_recipes():
     """
     This function allows the user to browse the current list of recipes in the database.
 
@@ -220,7 +217,7 @@ def current_recipes():
     print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
 if __name__ == "__main__":
-    current_recipes() 
+    view_recipes() 
 
 def search_recipes():
     """
