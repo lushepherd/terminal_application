@@ -20,6 +20,7 @@ console = Console()
 md = Markdown(MARKDOWN)
 console.print(md, style="cornsilk1 on dark_sea_green3")
 
+
 def option_menu():
     """
     The main menu that handles user interaction.
@@ -38,10 +39,10 @@ def option_menu():
             "📄 Export to PDF",
             "Exit",
         ]
-        
+
         action = inquirer.rawlist(
             message="Please select an option from the menu:",
-            choices = choices
+            choices=choices
         ).execute()
 
         if action == "Exit":
@@ -74,6 +75,7 @@ def option_menu():
                 export_recipe()
             else:
                 print("Invalid Input")
+
 
 if __name__ == "__main__":
     option_menu()
