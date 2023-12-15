@@ -24,7 +24,7 @@ def select_category():
     return selected_category
 
 # Displays an error if user input is empty
-# Catches potential errors and prints the error type
+# Catches potential errors during input handling, and input validation is handled by the inquirerpy inquirer.text function
 
 
 def validate_input(result):
@@ -38,9 +38,8 @@ def input_text(message, validate):
             validate=validate,
             invalid_message="Input cannot be empty."
         ).execute()
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        raise
+    except Exception:
+        pass
 
 # Function that allows you to select a category and returns an error if no recipes
 # Used in functions that require recipe retrieval - modify recipe, view recipe, delete recipe, export recipe
@@ -327,33 +326,28 @@ def export_to_pdf(recipe):
 
 
 def export_recipe():
-    try:
-        """
-        Allows user to export a recipe to PDF.
+    """
+    Allows user to export a recipe to PDF.
 
-        They are prompted to select a category and then a recipe to export.
-        Creates a PDF file with the details of the selected recipe.
-        The user can exit using the "exit" option.
-        If the category is empty, it will return an error.
-        If errors occur with export function, error message will be printed.
-        """
-        category = select_category()
+    They are prompted to select a category and then a recipe to export.
+    Creates a PDF file with the details of the selected recipe.
+    The user can exit using the "exit" option.
+    If the category is empty, it will return an error.
+    """
+    category = select_category()
 
-        if category is None:
-            print("Recipe export canceled.")
-            return
+    if category is None:
+        print("Recipe export canceled.")
+        return
 
-        selected_recipe = select_recipe(category, db)
+    selected_recipe = select_recipe(category, db)
 
-        # Exports selected_recipe to PDF and prints a confirmation statement to the user.
+    # Exports selected_recipe to PDF and prints a confirmation statement to the user.
 
-        if selected_recipe is not None:
-            export_to_pdf(selected_recipe)
-            print(
-                f"Recipe '{selected_recipe['recipe_name']}' successfully exported to PDF.")
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    if selected_recipe is not None:
+        export_to_pdf(selected_recipe)
+        print(
+            f"Recipe '{selected_recipe['recipe_name']}' successfully exported to PDF.")
 
 
 if __name__ == "__main__":
