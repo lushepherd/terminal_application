@@ -1,8 +1,8 @@
+import os
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from tinydb import TinyDB, Query
 from fpdf import FPDF
-import os
 
 # User needs to be able to create a recipe under a category with name/ ingredients/ method
 # Needs to be able to be modified/ deleted/ browsed/ searched/ exported to PDF
@@ -34,14 +34,15 @@ def validate_input(result):
 
 
 def input_text(message, validate):
-    try:
-        return inquirer.text(
+    while True:
+        user_input = inquirer.text(
             message=message,
             validate=validate,
             invalid_message="Input cannot be empty."
         ).execute()
-    except Exception:
-        pass
+
+        if user_input:
+            return user_input
 
 # Function that allows you to select a category and returns an error if no recipes
 # Used in functions that require recipe retrieval - modify recipe, view recipe, delete recipe, export recipe
@@ -68,8 +69,9 @@ def select_recipe(category, db):
 
     return sorted_recipes[selected_recipe_index]
 
+
 def clear_screen():
-    os.system('clear')
+    os.system("clear")
 
 
 def get_recipe_details():
@@ -213,7 +215,8 @@ def delete_recipe():
     # Selected recipe is deleted and confirmation provided to the user.
 
     if selected_recipe:
-        db.table(category).remove(Query().recipe_name == selected_recipe["recipe_name"])
+        db.table(category).remove(Query().recipe_name ==
+                                  selected_recipe["recipe_name"])
         clear_screen()
         print(f"{selected_recipe['recipe_name']} has been deleted.")
 

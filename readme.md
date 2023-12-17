@@ -8,6 +8,18 @@ This is Term 1 Assignment 3 - Terminal Application.
 
 For my assignment, I decided to create a recipe application. 
 The code style guide I will be adhering to is Pep 8 - https://peps.python.org/pep-0008/
+I am using the VsCode formatter extension autopep8 to ensure code is in line with this requirement. I have provided some of the main points below:
+
+- Prefers use of 4 spaces for indentation over tabs
+
+- Limited line length of 79 characters
+
+- Two blank lines separating main functions/ class definitions
+
+- Imports should go in order of:
+    1. Standard library imports
+    2. Related third party imports
+    3. Local application/ library specific imports
 
 ## Features
 
@@ -39,7 +51,6 @@ I have implemented error handling for invalid inputs or empty results.
 
 Users will also be able to export recipes to a PDF to save to their local computer in an easy-to-read printable format.<br>
 
-
 ### Implementation Plan
 
 I have used Asana to break this task down into smaller items. Each item is a task to be ticked off. Some tasks have a description and some have sub-tasks to break these down even further.<br>
@@ -57,8 +68,27 @@ I have provided detailed screenshots below.
 ![Create help doc task and its description](/images/asana9.png)
 ![Create Readme task and its checklist](/images/asana10.png)
 
+## System Requirements and Installation
+
+### Required OS
+- Linux
+- Windows with WSL (Windows Subsystem for Linux)
+
+Requires python3 and pip3 to be installed.
+To run the application, please follow the help documentation below.
 
 ### Help Documentation
+
+1. Ensure you are currently in the src folder in the terminal.
+2. Execute the bash script with the following prompt:
+```
+bash run.sh
+```
+3. This script will check if Python is installed and also check the version is Python3.
+4. If the above requirement is met, it will create and activate a virtual environment, install requirements from requirements.txt and run the program.
+5. Yes, you will be subject to my random loading messages (sorry, not sorry!)
+
+༼つ ◕_◕ ༽つ🍰🍔🍕
 
 ## Resources
 
@@ -83,6 +113,8 @@ I have provided detailed screenshots below.
 - Stack Overflow. (n.d.). Is it possible to ask for keys from TinyDB. [online] Available at: https://stackoverflow.com/questions/27197052/is-it-possible-to-ask-for-keys-from-tinydb [Accessed 12 Dec. 2023].
 
 - python.hotexamples.com. (n.d.). Python TinyDB Examples, tinydb.TinyDB Python Examples - HotExamples. [online] Available at: https://python.hotexamples.com/examples/tinydb/TinyDB/-/python-tinydb-class-examples.html [Accessed 12 Dec. 2023].
+
+- edstem.org. (n.d.). Ed Discussion. [online] Available at: https://edstem.org/au/courses/13988/lessons/43347/slides/297106 [Accessed 17 Dec. 2023].
 
 ‌
 ‌
