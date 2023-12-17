@@ -13,6 +13,8 @@ A terminal application that allows the user to create and manage a recipe book.
 They can add, modify, delete, browse, search, and export recipes to PDF.
 
 """
+clear_screen()
+
 MARKDOWN = """
 # 🥗 🍔 Welcome to Your Recipe Book! 🍰 🍨
 """
@@ -32,7 +34,7 @@ def option_menu():
     while True:
         choices = [
             "➕ Add a new recipe",
-            "✏️  Modify a recipe",
+            "✏️ Modify a recipe",
             "❌ Delete a recipe",
             "🧐 View your current recipes",
             "🔍 Search for a recipe",
@@ -50,7 +52,7 @@ def option_menu():
             MARKDOWN = """
             Thank you for using Your Recipe Book!
 
-            ༼ つ ◕_◕ ༽つ🍰🍔🍕
+            ༼つ ◕_◕ ༽つ🍰🍔🍕
 
             Github: https://github.com/lushepherd
             Linkedin: https://www.linkedin.com/in/lucy-shepherd-44236928a/

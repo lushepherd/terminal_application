@@ -20,6 +20,7 @@ def select_category():
     ).execute()
 
     if selected_category == "Exit":
+        clear_screen()
         return None
 
     return selected_category
