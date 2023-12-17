@@ -3,7 +3,7 @@ from rich.console import Console
 from rich import print
 from rich.style import Style
 from rich.markdown import Markdown
-from recipebook_functions import add_recipe, modify_recipe, delete_recipe, view_recipes, search_recipes, export_recipe
+from recipebook_functions import add_recipe, modify_recipe, delete_recipe, view_recipes, search_recipes, export_recipe, clear_screen
 # Pep 8 guide states imports should go 1. Standard library imports, 2. Related third party imports, 3. Local application/ library specific imports
 
 """
@@ -46,6 +46,7 @@ def option_menu():
         ).execute()
 
         if action == "Exit":
+            clear_screen()
             MARKDOWN = """
             Thank you for using Your Recipe Book!
 

@@ -2,6 +2,7 @@ from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from tinydb import TinyDB, Query
 from fpdf import FPDF
+import os
 
 # User needs to be able to create a recipe under a category with name/ ingredients/ method
 # Needs to be able to be modified/ deleted/ browsed/ searched/ exported to PDF
@@ -66,6 +67,9 @@ def select_recipe(category, db):
 
     return sorted_recipes[selected_recipe_index]
 
+def clear_screen():
+    os.system('clear')
+
 
 def get_recipe_details():
     """
@@ -78,17 +82,20 @@ def get_recipe_details():
 
     recipe_name = input_or_exit("Enter the recipe name or 'exit' to cancel:")
     if recipe_name is None:
+        clear_screen()
         print("Recipe add canceled.")
         return None
 
     ingredients = input_or_exit("Enter the ingredients separated by commas:")
     if ingredients is None or 'exit' in ingredients:
+        clear_screen()
         print("Recipe add canceled.")
         return None
     ingredients = ingredients.split(',')
 
     method = input_or_exit("Enter the method:")
     if method is None:
+        clear_screen()
         print("Recipe add canceled.")
         return None
 
@@ -122,6 +129,10 @@ def add_recipe():
         category_db.insert(recipe_data)
         print("Recipe added successfully!")
 
+    if recipe_data is not None:
+        clear_screen()
+        print("Recipe added successfully!")
+
 
 if __name__ == "__main__":
     add_recipe()
@@ -141,6 +152,7 @@ def modify_recipe():
     category = select_category()
 
     if category is None:
+        clear_screen()
         print("Recipe modify canceled.")
         return
 
@@ -171,7 +183,7 @@ def modify_recipe():
                 "method"] == selected_recipe["method"])
 
         # Prints confirmation message once completed
-
+        clear_screen()
         print(f"\nRecipe has been successfully updated.")
 
 
@@ -191,6 +203,7 @@ def delete_recipe():
     category = select_category()
 
     if category is None:
+        clear_screen()
         print("Recipe delete canceled.")
         return
 
@@ -199,8 +212,8 @@ def delete_recipe():
     # Selected recipe is deleted and confirmation provided to the user.
 
     if selected_recipe:
-        db.table(category).remove(Query().recipe_name ==
-                                  selected_recipe["recipe_name"])
+        db.table(category).remove(Query().recipe_name == selected_recipe["recipe_name"])
+        clear_screen()
         print(f"{selected_recipe['recipe_name']} has been deleted.")
 
 
@@ -223,6 +236,7 @@ def view_recipes():
     category = select_category()
 
     if category is None:
+        clear_screen()
         print("Recipe view canceled.")
         return
 
@@ -231,6 +245,7 @@ def view_recipes():
     # Prints selected recipe details - recipe name, ingredients, method.
 
     if selected_recipe:
+        clear_screen()
         print(
             f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
@@ -254,6 +269,7 @@ def search_recipes():
     ).execute().lower()
 
     if search_term == 'exit'.lower():
+        clear_screen()
         print("Recipe search canceled.")
         return
 
@@ -284,6 +300,8 @@ def search_recipes():
         return
 
     selected_recipe = sorted_recipes[selected_recipe_index]
+
+    clear_screen()
 
     print(
         f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
@@ -337,6 +355,7 @@ def export_recipe():
     category = select_category()
 
     if category is None:
+        clear_screen()
         print("Recipe export canceled.")
         return
 
@@ -345,6 +364,7 @@ def export_recipe():
     # Exports selected_recipe to PDF and prints a confirmation statement to the user.
 
     if selected_recipe is not None:
+        clear_screen()
         export_to_pdf(selected_recipe)
         print(
             f"Recipe '{selected_recipe['recipe_name']}' successfully exported to PDF.")
