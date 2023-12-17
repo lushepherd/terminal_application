@@ -51,7 +51,7 @@ def option_menu():
         if action == "Exit":
             clear_screen()
             MARKDOWN = """
-            Thank you for using Your Recipe Book!
+            You're a rare steak! Thanks for choosing Your Recipe Book.
 
             ༼つ ◕_◕ ༽つ🍰🍔🍕
 

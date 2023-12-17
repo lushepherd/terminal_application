@@ -73,6 +73,7 @@ I have provided detailed screenshots below.
 ### Required OS
 - Linux
 - Windows with WSL (Windows Subsystem for Linux)
+- MacOS
 
 Requires python3 and pip3 to be installed.
 To run the application, please follow the help documentation below.

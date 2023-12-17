@@ -6,16 +6,17 @@ messages=("Loading... Please wait while I count to infinity."
           "Loading... This may take a while. Or not. I'm not a fortune teller."
           "Loading... Please enjoy this elevator music while you wait."
           "Loading... I'm sorry, I can't do that. Just kidding. Or am I?"
-          "
-          {\_/}
-          (●_●)
-          ( >🌮  Want a taco?")
+          "Loading... Searching for the meaning of life. This may take a while!"
+          "Loading... Attempting to break the space-time continuum. Hold tight!"
+          "Loading... Sending carrier pigeons with your data."
+          "Loading... Warming up the hamster on the wheel."
+          "Loading... Converting coffee to code.")
 
 # Randomly chooses a message from the array above
 echo "${messages[RANDOM % ${#messages[@]}]}"
 
-# Pause for 3 seconds so message can be read (lol)
-sleep 3
+# Pause for 2 seconds so message can be read (lol)
+sleep 2
 
 # Check if the correct version of Python is installed
 if command -v python3 &> /dev/null; 
