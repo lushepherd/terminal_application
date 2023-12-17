@@ -40,6 +40,7 @@ then
         echo "༼つ ◕_◕ ༽つ🍰🍔🍕"
         exit 1
     fi
+    
 else
     echo "NO RECIPES FOR YOU! Install Python 3 to continue." >&2
     echo "༼つ ◕_◕ ༽つ🍰🍔🍕"

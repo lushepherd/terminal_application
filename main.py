@@ -35,11 +35,11 @@ def option_menu():
     while True:
         choices = [
             "➕ Add a new recipe",
-            "✏️ Modify a recipe",
+            "📝 Modify a recipe",
             "❌ Delete a recipe",
             "🧐 View your current recipes",
             "🔍 Search for a recipe",
-            "📄 Export to PDF",
+            "📑 Export to PDF",
             "Exit",
         ]
 
