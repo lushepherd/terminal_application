@@ -75,33 +75,62 @@ def select_recipe(category, db):
 def clear_screen():
     os.system("clear")
 
+# Creates a list of all recipes in the DB to search through
 
-def get_recipe_details():
-    """
-    Get recipe details before add function
-    Accepts user input of recipe name, ingredients, method and checks at each stage if the input is exit, in which case it returns to the main menu
-    """
-    def input_or_exit(message):
-        user_input = input_text(message, validate_input)
-        return None if user_input.lower() == 'exit' else user_input
 
-    recipe_name = input_or_exit("Enter the recipe name or 'exit' to cancel:")
-    if recipe_name is None:
-        clear_screen()
-        print("Recipe add canceled. Oh, the culinary world will surely mourn the loss of this masterpiece.")
-        return None
+def get_all_recipes():
+    all_recipes = []
+    for category in db.tables():
+        category_recipes = db.table(category).all()
+        all_recipes.extend(category_recipes)
+    return all_recipes
+
+# Checks for any matching recipe names when a user adds a new recipe
+
+
+def recipe_name_already_exists(recipe_name):
+    all_recipes = get_all_recipes()
+    same_recipe_name = recipe_name.lower()
+
+    return any(same_recipe_name == recipe["recipe_name"].lower() for recipe in all_recipes)
+
+
+def get_recipe_details(error_message="Recipe add canceled. Oh, the culinary world will surely mourn the loss of this masterpiece."):
+    """
+    Get recipe details before the add function
+    Accepts user input of recipe name, ingredients, and method.
+    Checks at each stage if the input is 'exit', in which case it returns to the main menu.
+    Displays an error if the recipe name already exists in any category.
+    """
+    while True:
+        def input_or_exit(message):
+            user_input = input_text(message, validate_input)
+            return None if user_input.lower() == 'exit' else user_input
+
+        recipe_name = input_or_exit(
+            "Enter the recipe name or 'exit' to cancel:")
+        if recipe_name is None:
+            clear_screen()
+            print(error_message)
+            return None
+
+        if recipe_name_already_exists(recipe_name):
+            clear_screen()
+            print(f"Nope. '{recipe_name}' already exists. Try again (or not).")
+        else:
+            break
 
     ingredients = input_or_exit("Enter the ingredients separated by commas:")
-    if ingredients is None or 'exit' in ingredients:
+    if ingredients is None:
         clear_screen()
-        print("Recipe add canceled. Oh, the culinary world will surely mourn the loss of this masterpiece.")
+        print(error_message)
         return None
     ingredients = ingredients.split(',')
 
     method = input_or_exit("Enter the method:")
     if method is None:
         clear_screen()
-        print("Recipe add canceled. Oh, the culinary world will surely mourn the loss of this masterpiece.")
+        print(error_message)
         return None
 
     return {
@@ -110,24 +139,16 @@ def get_recipe_details():
         "method": method,
     }
 
-# Add recipe
-
 
 def add_recipe():
-    """
-    This function allows the user to add a new recipe to a category of their choosing.
-
-    After selecting a category, they are prompted to enter a recipe name, ingredients and a method.
-    This recipe is then added to the database under the chosen category.
-    Users can select exit or type as input at each stage to return to the main menu.
-    """
     category = select_category()
 
     if category is None:
         print("Recipe add canceled. Oh, the culinary world will surely mourn the loss of this masterpiece.")
         return
 
-    recipe_data = get_recipe_details()
+    recipe_data = get_recipe_details(
+        error_message="Recipe add canceled. Oh, the culinary world will surely mourn the loss of this masterpiece.")
 
     if recipe_data is not None:
         category_db = db.table(category)
@@ -273,15 +294,12 @@ def search_recipes():
 
     if search_term == 'exit'.lower():
         clear_screen()
-        print("Recipe search canceled. It turns out, finding recipes in a database isn't as exciting as a treasure hunt. Who knew?")
+        print("Recipe search canceled. Winging it today, are we?")
         return
 
     # Gets all recipes in the database
 
-    all_recipes = []
-    for category in db.tables():
-        category_recipes = db.table(category).all()
-        all_recipes.extend(category_recipes)
+    all_recipes = get_all_recipes()
 
     # Creates a new list (matching_recipes) containing only recipes from all_recipes that meet the specified conditions
     # Conditions = if search_term in recipe (recipe_name, ingredient) matches, it will be included in the matching_recipe list
