@@ -54,15 +54,13 @@ def select_recipe(category, db):
 
     if not category_recipes:
         clear_screen()
-        print(
-            f"Oops, the {category} category is as empty as my fridge.")
+        print(f"Oops, the {category} category is as empty as my fridge.")
         return None
 
     sorted_recipes = sorted(
         category_recipes, key=lambda x: x["recipe_name"].lower())
 
-    recipe_choices = [Choice(value=index, name=recipe["recipe_name"])
-                      for index, recipe in enumerate(sorted_recipes)]
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"])for index, recipe in enumerate(sorted_recipes)]
 
     selected_recipe_index = inquirer.select(
         message="Select a recipe:",
@@ -183,8 +181,16 @@ def modify_recipe():
     # Prints the selected recipe then prompts the user for which details they would like to modify
 
     if selected_recipe:
-        print(
-            f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
+        print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
+
+        confirm_modify = inquirer.confirm(
+            message="Are you sure you want to modify this recipe?"
+        ).execute()
+
+        if not confirm_modify:
+            clear_screen()
+            print("Recipe modify canceled. Maybe it's for the best.")
+            return
 
         item_to_modify = inquirer.select(
             message="Select the item to modify:",
@@ -204,7 +210,6 @@ def modify_recipe():
             db.table(category).update({"method": new_value}, Query()[
                 "method"] == selected_recipe["method"])
 
-        # Prints confirmation message once completed
         clear_screen()
         print(f"Boom! Recipe updated. 🤜🤛")
 
@@ -231,14 +236,21 @@ def delete_recipe():
 
     selected_recipe = select_recipe(category, db)
 
-    # Selected recipe is deleted and confirmation provided to the user.
 
     if selected_recipe:
-        db.table(category).remove(Query().recipe_name ==
-                                  selected_recipe["recipe_name"])
+        confirm_delete = inquirer.confirm(
+            message=f"Are you sure you want to delete {selected_recipe['recipe_name']}?"
+        ).execute()
+
+        if not confirm_delete:
+            clear_screen()
+            print("Recipe delete canceled. Your recipe has been spared (for now)")
+            return
+
+        # Delete the selected recipe
+        db.table(category).remove(Query().recipe_name == selected_recipe["recipe_name"])
         clear_screen()
-        print(
-            f"{selected_recipe['recipe_name']} has been deleted. It's now off to the recipe retirement home in the cloud.")
+        print(f"{selected_recipe['recipe_name']} has been deleted. It's now off to the recipe retirement home in the cloud.")
 
 
 if __name__ == "__main__":
@@ -261,7 +273,7 @@ def view_recipes():
 
     if category is None:
         clear_screen()
-        print("Recipe view canceled. Guess your recipes will have to tell their stories another time.")
+        print("Recipe view canceled. Do you trust your memory or are you ordering pizza?")
         return
 
     selected_recipe = select_recipe(category, db)
@@ -270,8 +282,7 @@ def view_recipes():
 
     if selected_recipe:
         clear_screen()
-        print(
-            f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
+        print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
 
 if __name__ == "__main__":
@@ -303,6 +314,7 @@ def search_recipes():
 
     # Creates a new list (matching_recipes) containing only recipes from all_recipes that meet the specified conditions
     # Conditions = if search_term in recipe (recipe_name, ingredient) matches, it will be included in the matching_recipe list
+
     matching_recipes = [recipe for recipe in all_recipes if search_term in recipe["recipe_name"].lower(
     ) or any(search_term in ingredient.lower() for ingredient in recipe["ingredients"])]
 
