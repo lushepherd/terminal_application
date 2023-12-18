@@ -60,7 +60,8 @@ def select_recipe(category, db):
     sorted_recipes = sorted(
         category_recipes, key=lambda x: x["recipe_name"].lower())
 
-    recipe_choices = [Choice(value=index, name=recipe["recipe_name"])for index, recipe in enumerate(sorted_recipes)]
+    recipe_choices = [Choice(value=index, name=recipe["recipe_name"])
+                      for index, recipe in enumerate(sorted_recipes)]
 
     selected_recipe_index = inquirer.select(
         message="Select a recipe:",
@@ -154,6 +155,7 @@ def add_recipe():
         clear_screen()
         print("Boom! Recipe added! 🤜🤛")
 
+
 if __name__ == "__main__":
     add_recipe()
 
@@ -181,7 +183,8 @@ def modify_recipe():
     # Prints the selected recipe then prompts the user for which details they would like to modify
 
     if selected_recipe:
-        print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
+        print(
+            f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
         confirm_modify = inquirer.confirm(
             message="Are you sure you want to modify this recipe?"
@@ -236,7 +239,6 @@ def delete_recipe():
 
     selected_recipe = select_recipe(category, db)
 
-
     if selected_recipe:
         confirm_delete = inquirer.confirm(
             message=f"Are you sure you want to delete {selected_recipe['recipe_name']}?"
@@ -248,9 +250,11 @@ def delete_recipe():
             return
 
         # Delete the selected recipe
-        db.table(category).remove(Query().recipe_name == selected_recipe["recipe_name"])
+        db.table(category).remove(Query().recipe_name ==
+                                  selected_recipe["recipe_name"])
         clear_screen()
-        print(f"{selected_recipe['recipe_name']} has been deleted. It's now off to the recipe retirement home in the cloud.")
+        print(
+            f"{selected_recipe['recipe_name']} has been deleted. It's now off to the recipe retirement home in the cloud.")
 
 
 if __name__ == "__main__":
@@ -282,7 +286,8 @@ def view_recipes():
 
     if selected_recipe:
         clear_screen()
-        print(f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
+        print(
+            f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
 
 if __name__ == "__main__":
