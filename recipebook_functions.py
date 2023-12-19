@@ -70,11 +70,14 @@ def select_recipe(category, db):
 
     return sorted_recipes[selected_recipe_index]
 
+# Clears the screen after completing a function
+
 
 def clear_screen():
     os.system("clear")
 
-# Creates a list of all recipes in the DB to search through
+# Creates a new list (all_recipes) containing only recipes from all_recipes that meet the specified conditions
+# Used in the search_recipes function and for checking for duplicate names in the add_recipe function
 
 
 def get_all_recipes():
@@ -180,7 +183,8 @@ def modify_recipe():
 
     selected_recipe = select_recipe(category, db)
 
-    # Prints the selected recipe then prompts the user for which details they would like to modify
+    # Prints the selected recipe then prompts the user to confirm they would like to modify recipe
+    # Prompts the user for which details they would like to modify
 
     if selected_recipe:
         print(
@@ -192,7 +196,7 @@ def modify_recipe():
 
         if not confirm_modify:
             clear_screen()
-            print("Recipe modify canceled. Maybe it's for the best.")
+            print("Recipe modify canceled. I too fear change.")
             return
 
         item_to_modify = inquirer.select(
@@ -317,7 +321,6 @@ def search_recipes():
 
     all_recipes = get_all_recipes()
 
-    # Creates a new list (matching_recipes) containing only recipes from all_recipes that meet the specified conditions
     # Conditions = if search_term in recipe (recipe_name, ingredient) matches, it will be included in the matching_recipe list
 
     matching_recipes = [recipe for recipe in all_recipes if search_term in recipe["recipe_name"].lower(
@@ -331,7 +334,7 @@ def search_recipes():
 
     selected_recipe_index = inquirer.select(
         message=f"Select a recipe from the search results (search term: {search_term}):",
-        choices=recipe_choices + [Choice(value=None, name="Exit")],
+        choices=recipe_choices,
     ).execute()
 
     if selected_recipe_index is None:
@@ -394,7 +397,7 @@ def export_recipe():
 
     if category is None:
         clear_screen()
-        print("Recipe export canceled. Because who needs nicely formatted recipes in a fancy PDF? Certainly not us.")
+        print("Recipe export canceled. Is it because you want to spend more time with me?")
         return
 
     selected_recipe = select_recipe(category, db)

@@ -81,11 +81,15 @@ To run the application, please follow the help documentation below.
 ### Help Documentation
 
 1. Ensure you are currently in the src folder in the terminal.
-2. Execute the bash script with the following prompt:
+2. Execute the bash script with the following prompts:
+```
+chmod +x run.sh
+```
+
 ```
 bash run.sh
 ```
-3. This script will check if Python is installed and also check the version is Python3.
+3. The first command will allow permissions for you to execute it. The script will check if Python is installed and also check the version is Python3.
 4. If the above requirement is met, it will create and activate a virtual environment, install requirements from requirements.txt and run the program.
 5. Yes, you will be subject to my random loading messages (sorry, not sorry!)
 
