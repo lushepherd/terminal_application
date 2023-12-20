@@ -9,6 +9,14 @@ from fpdf import FPDF
 
 db = TinyDB("recipes_db.json")
 
+# Clears the screen after completing a function
+
+def clear_screen():
+    os.system("clear")
+
+# Exit message function used to clear screen and print exit message either at the end of a function
+# or when a user selects exit
+
 def exit_message(message):
     clear_screen()
     print(message)
@@ -28,6 +36,14 @@ def select_category():
         return None
 
     return selected_category
+
+# Exit handler
+
+def user_exit(category, error_message):
+    if category is None:
+        exit_message(error_message)
+        return True
+    return False
 
 # Displays an error if user input is empty
 # Catches potential errors during input handling, and input validation is handled by the inquirerpy inquirer.text function
@@ -57,8 +73,7 @@ def select_recipe(category, db):
     category_recipes = db.table(category).all()
 
     if not category_recipes:
-        clear_screen()
-        print(f"Oops, the {category} category is as empty as my fridge.")
+        exit_message(f"Oops, the {category} category is as empty as my fridge.")
         return None
 
     sorted_recipes = sorted(
@@ -73,11 +88,6 @@ def select_recipe(category, db):
     ).execute()
 
     return sorted_recipes[selected_recipe_index]
-
-# Clears the screen after completing a function
-
-def clear_screen():
-    os.system("clear")
 
 # Creates a new list (all_recipes) containing only recipes from all_recipes that meet the specified conditions
 # Used in the search_recipes function and for checking for duplicate names in the add_recipe function
@@ -115,13 +125,11 @@ def get_recipe_details(error_message="Recipe add canceled. Oh, the culinary worl
         recipe_name = input_or_exit(
             "Enter the recipe name or 'exit' to cancel:")
         if recipe_name is None:
-            clear_screen()
-            print(error_message)
+            exit_message(error_message)
             return None
 
         if recipe_name_already_exists(recipe_name):
-            clear_screen()
-            print(f"Nope. '{recipe_name}' already exists. Try again (or not).")
+            exit_message(f"Nope. '{recipe_name}' already exists. Try again (or not).")
         else:
             break
 
@@ -144,15 +152,26 @@ def get_recipe_details(error_message="Recipe add canceled. Oh, the culinary worl
 
 
 def add_recipe():
+    """
+    Adds a new recipe to the category selected by the user.
+    If exit is typed, an exit message is displayed.
+    If a recipe with a name matching the database is entered, an error is displayed.
+    The recipe is inserted into the database and prints a confirmation.
+    """
     category = select_category()
 
     error_message = "Recipe add canceled. Oh, the culinary world will surely mourn the loss of this masterpiece."
 
-    if category is None:
-        exit_message(error_message)
+    # Error message prints if user types "exit" at any input step (name, ingredients, method)
+
+    if user_exit(category, error_message):
         return
 
-    recipe_data = get_recipe_details(error_message=error_message)
+    # Checks DB for recipes with the same name - if any are found, user is prompted to enter a different name
+
+    recipe_data = get_recipe_details(error_message)
+
+    # If recipe name, ingredients, and method are entered the details are added to the database
 
     if recipe_data is not None:
         category_db = db.table(category)
@@ -178,8 +197,9 @@ def modify_recipe():
 
     error_message = "Recipe modify canceled. It's not you; it's the recipe. It just wasn't ready for your brilliance."
 
-    if category is None:
-        exit_message(error_message)
+    # If user selects exit, error message is printed.
+
+    if user_exit(category, error_message):
         return
 
     selected_recipe = select_recipe(category, db)
@@ -190,6 +210,10 @@ def modify_recipe():
     if selected_recipe:
         print(
             f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
+
+        # Confirms if the user would like to modify selected recipe
+        # If Y, prompts them to select what item they would like to modify
+        # If N, prints exit message
 
         confirm_modify = inquirer.confirm(
             message="Are you sure you want to modify this recipe?"
@@ -207,6 +231,8 @@ def modify_recipe():
         new_value = inquirer.text(
             message=f"Enter the new {item_to_modify.lower()}:").execute()
 
+        # Updates the selected item in DB (name, ingredients, method)
+
         if item_to_modify == "Name":
             db.table(category).update({"recipe_name": new_value}, Query()[
                 "recipe_name"] == selected_recipe["recipe_name"])
@@ -217,8 +243,7 @@ def modify_recipe():
             db.table(category).update({"method": new_value}, Query()[
                 "method"] == selected_recipe["method"])
 
-        clear_screen()
-        print(f"Boom! Recipe updated. 🤜🤛")
+        exit_message(f"Boom! Recipe updated. 🤜🤛")
 
 
 if __name__ == "__main__":
@@ -238,8 +263,7 @@ def delete_recipe():
 
     error_message = "Recipe delete canceled. Because recipes have feelings too, right?"
 
-    if category is None:
-        exit_message(error_message)
+    if user_exit(category, error_message):
         return
 
     selected_recipe = select_recipe(category, db)
@@ -278,8 +302,9 @@ def view_recipes():
     """
     category = select_category()
 
-    if category is None:
-        exit_message("Recipe view canceled. Do you trust your memory or are you ordering pizza?")
+    error_message = "Recipe view canceled. Do you trust your memory or are you ordering pizza?"
+
+    if user_exit(category, error_message):
         return
 
     selected_recipe = select_recipe(category, db)
@@ -305,22 +330,32 @@ def search_recipes():
 
     If the user types "exit" it will return to the main menu.
     """
-    search_term = inquirer.text(
-        message="Enter a recipe name or ingredient to search or type 'exit' to cancel:"
-    ).execute().lower()
+    error_message = "Searching for the recipe to make air today, are we?"
+    
+    while True:
+        search_term = inquirer.text(
+            message="Enter a recipe name or ingredient to search or type 'exit' to cancel:",
+            validate=validate_input,
+            invalid_message=error_message
+        ).execute().lower()
 
-    if search_term == 'exit'.lower():
-        exit_message("Recipe search canceled. Winging it today, are we?")
-        return
+        if search_term == 'exit':
+            exit_message("Recipe search canceled. Winging it today, are we?")
+            return
 
-    # Gets all recipes in the database
+        # Gets all recipes in the database
 
-    all_recipes = get_all_recipes()
+        all_recipes = get_all_recipes()
 
-    # Conditions = if search_term in recipe (recipe_name, ingredient) matches, it will be included in the matching_recipe list
+        # Conditions = if search_term in recipe (recipe_name, ingredient) matches, it will be included in the matching_recipe list
 
-    matching_recipes = [recipe for recipe in all_recipes if search_term in recipe["recipe_name"].lower(
-    ) or any(search_term in ingredient.lower() for ingredient in recipe["ingredients"])]
+        matching_recipes = [recipe for recipe in all_recipes if search_term in recipe["recipe_name"].lower(
+        ) or any(search_term in ingredient.lower() for ingredient in recipe["ingredients"])]
+
+        if not matching_recipes:
+            exit_message(f"Uhh no recipes with {search_term} here. Have you added any yet? Awkward.")
+        else:
+            break
 
     sorted_recipes = sorted(
         matching_recipes, key=lambda x: x["recipe_name"].lower())
@@ -332,9 +367,6 @@ def search_recipes():
         message=f"Select a recipe from the search results (search term: {search_term}):",
         choices=recipe_choices,
     ).execute()
-
-    if selected_recipe_index is None:
-        return
 
     selected_recipe = sorted_recipes[selected_recipe_index]
 
@@ -389,8 +421,9 @@ def export_recipe():
     """
     category = select_category()
 
-    if category is None:
-        exit_message("Recipe export canceled. Is it because you want to spend more time with me?")
+    error_message = "Recipe export canceled. Is it because you want to spend more time with me?"
+
+    if user_exit(category, error_message):
         return
 
     selected_recipe = select_recipe(category, db)
