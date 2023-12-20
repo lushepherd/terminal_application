@@ -83,11 +83,11 @@ To run the application, please follow the help documentation below.
 1. Ensure you are currently in the src folder in the terminal.
 2. Execute the bash script with the following prompts:
 ```
-chmod +x run.sh
+chmod +x setup.sh run.sh
 ```
 
 ```
-bash run.sh
+bash setup.sh
 ```
 3. The first command will allow permissions for you to execute it. The script will check if Python is installed and also check the version is Python3.
 4. If the above requirement is met, it will create and activate a virtual environment, install requirements from requirements.txt and run the program.
@@ -121,5 +121,8 @@ bash run.sh
 
 - edstem.org. (n.d.). Ed Discussion. [online] Available at: https://edstem.org/au/courses/13988/lessons/43347/slides/297106 [Accessed 17 Dec. 2023].
 
+- Anon, (2022). Bash Error Detection and Handling: Tips and Tricks – TecAdmin. [online] Available at: https://tecadmin.net/bash-error-detection-and-handling-tips-and-tricks/ [Accessed 20 Dec. 2023].
+
+‌
 ‌
 ‌

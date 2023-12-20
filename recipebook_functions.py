@@ -9,6 +9,10 @@ from fpdf import FPDF
 
 db = TinyDB("recipes_db.json")
 
+def exit_message(message):
+    clear_screen()
+    print(message)
+
 # Select category function used across most features
 
 
@@ -72,7 +76,6 @@ def select_recipe(category, db):
 
 # Clears the screen after completing a function
 
-
 def clear_screen():
     os.system("clear")
 
@@ -124,15 +127,13 @@ def get_recipe_details(error_message="Recipe add canceled. Oh, the culinary worl
 
     ingredients = input_or_exit("Enter the ingredients separated by commas:")
     if ingredients is None:
-        clear_screen()
-        print(error_message)
+        exit_message(error_message)
         return None
     ingredients = ingredients.split(',')
 
     method = input_or_exit("Enter the method:")
     if method is None:
-        clear_screen()
-        print(error_message)
+        exit_message(error_message)
         return None
 
     return {
@@ -145,19 +146,18 @@ def get_recipe_details(error_message="Recipe add canceled. Oh, the culinary worl
 def add_recipe():
     category = select_category()
 
+    error_message = "Recipe add canceled. Oh, the culinary world will surely mourn the loss of this masterpiece."
+
     if category is None:
-        print("Recipe add canceled. Oh, the culinary world will surely mourn the loss of this masterpiece.")
+        exit_message(error_message)
         return
 
-    recipe_data = get_recipe_details(
-        error_message="Recipe add canceled. Oh, the culinary world will surely mourn the loss of this masterpiece.")
+    recipe_data = get_recipe_details(error_message=error_message)
 
     if recipe_data is not None:
         category_db = db.table(category)
         category_db.insert(recipe_data)
-        clear_screen()
-        print("Boom! Recipe added! 🤜🤛")
-
+        exit_message("Boom! Recipe added! 🤜🤛")
 
 if __name__ == "__main__":
     add_recipe()
@@ -176,9 +176,10 @@ def modify_recipe():
     """
     category = select_category()
 
+    error_message = "Recipe modify canceled. It's not you; it's the recipe. It just wasn't ready for your brilliance."
+
     if category is None:
-        clear_screen()
-        print("Recipe modify canceled. It's not you; it's the recipe. It just wasn't ready for your brilliance.")
+        exit_message(error_message)
         return
 
     selected_recipe = select_recipe(category, db)
@@ -195,8 +196,7 @@ def modify_recipe():
         ).execute()
 
         if not confirm_modify:
-            clear_screen()
-            print("Recipe modify canceled. I too fear change.")
+            exit_message("Recipe modify canceled. I too fear change.")
             return
 
         item_to_modify = inquirer.select(
@@ -236,9 +236,10 @@ def delete_recipe():
     """
     category = select_category()
 
+    error_message = "Recipe delete canceled. Because recipes have feelings too, right?"
+
     if category is None:
-        clear_screen()
-        print("Recipe delete canceled. Because recipes have feelings too, right?")
+        exit_message(error_message)
         return
 
     selected_recipe = select_recipe(category, db)
@@ -249,15 +250,13 @@ def delete_recipe():
         ).execute()
 
         if not confirm_delete:
-            clear_screen()
-            print("Recipe delete canceled. Your recipe has been spared (for now)")
+            exit_message("Recipe delete canceled. Your recipe has been spared (for now)")
             return
 
         # Delete the selected recipe
         db.table(category).remove(Query().recipe_name ==
                                   selected_recipe["recipe_name"])
-        clear_screen()
-        print(
+        exit_message(
             f"{selected_recipe['recipe_name']} has been deleted. It's now off to the recipe retirement home in the cloud.")
 
 
@@ -280,8 +279,7 @@ def view_recipes():
     category = select_category()
 
     if category is None:
-        clear_screen()
-        print("Recipe view canceled. Do you trust your memory or are you ordering pizza?")
+        exit_message("Recipe view canceled. Do you trust your memory or are you ordering pizza?")
         return
 
     selected_recipe = select_recipe(category, db)
@@ -289,8 +287,7 @@ def view_recipes():
     # Prints selected recipe details - recipe name, ingredients, method.
 
     if selected_recipe:
-        clear_screen()
-        print(
+        exit_message(
             f"\nRecipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
 
@@ -313,8 +310,7 @@ def search_recipes():
     ).execute().lower()
 
     if search_term == 'exit'.lower():
-        clear_screen()
-        print("Recipe search canceled. Winging it today, are we?")
+        exit_message("Recipe search canceled. Winging it today, are we?")
         return
 
     # Gets all recipes in the database
@@ -342,9 +338,7 @@ def search_recipes():
 
     selected_recipe = sorted_recipes[selected_recipe_index]
 
-    clear_screen()
-
-    print(
+    exit_message(
         f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
 
 
@@ -396,8 +390,7 @@ def export_recipe():
     category = select_category()
 
     if category is None:
-        clear_screen()
-        print("Recipe export canceled. Is it because you want to spend more time with me?")
+        exit_message("Recipe export canceled. Is it because you want to spend more time with me?")
         return
 
     selected_recipe = select_recipe(category, db)
@@ -405,9 +398,8 @@ def export_recipe():
     # Exports selected_recipe to PDF and prints a confirmation statement to the user.
 
     if selected_recipe is not None:
-        clear_screen()
         export_to_pdf(selected_recipe)
-        print(
+        exit_message(
             f"Your recipe has achieved its lifelong dream of becoming a PDF. It's all grown up now and ready for the outside world.")
 
 
