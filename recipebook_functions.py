@@ -1,4 +1,5 @@
 import os
+import sys
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from tinydb import TinyDB, Query
@@ -11,11 +12,13 @@ db = TinyDB("recipes_db.json")
 
 # Clears the screen after completing a function
 
+
 def clear_screen():
     os.system("clear")
 
 # Exit message function used to clear screen and print exit message either at the end of a function
 # or when a user selects exit
+
 
 def exit_message(message):
     clear_screen()
@@ -38,6 +41,7 @@ def select_category():
     return selected_category
 
 # Exit handler
+
 
 def user_exit(category, error_message):
     if category is None:
@@ -73,7 +77,8 @@ def select_recipe(category, db):
     category_recipes = db.table(category).all()
 
     if not category_recipes:
-        exit_message(f"Oops, the {category} category is as empty as my fridge.")
+        exit_message(
+            f"Oops, the {category} category is as empty as my fridge.")
         return None
 
     sorted_recipes = sorted(
@@ -129,7 +134,8 @@ def get_recipe_details(error_message="Recipe add canceled. Oh, the culinary worl
             return None
 
         if recipe_name_already_exists(recipe_name):
-            exit_message(f"Nope. '{recipe_name}' already exists. Try again (or not).")
+            exit_message(
+                f"Nope. '{recipe_name}' already exists. Try again (or not).")
         else:
             break
 
@@ -274,7 +280,8 @@ def delete_recipe():
         ).execute()
 
         if not confirm_delete:
-            exit_message("Recipe delete canceled. Your recipe has been spared (for now)")
+            exit_message(
+                "Recipe delete canceled. Your recipe has been spared (for now)")
             return
 
         # Delete the selected recipe
@@ -330,13 +337,13 @@ def search_recipes():
 
     If the user types "exit" it will return to the main menu.
     """
-    error_message = "Searching for the recipe to make air today, are we?"
-    
+    # Validates user input. 0 = false - if no input, will return error message above.
+
     while True:
         search_term = inquirer.text(
             message="Enter a recipe name or ingredient to search or type 'exit' to cancel:",
             validate=validate_input,
-            invalid_message=error_message
+            invalid_message="Searching for the recipe to make air today, are we?"
         ).execute().lower()
 
         if search_term == 'exit':
@@ -352,13 +359,20 @@ def search_recipes():
         matching_recipes = [recipe for recipe in all_recipes if search_term in recipe["recipe_name"].lower(
         ) or any(search_term in ingredient.lower() for ingredient in recipe["ingredients"])]
 
+        # Error handler - if no recipes match search term, returns error.
+
         if not matching_recipes:
-            exit_message(f"Uhh no recipes with {search_term} here. Have you added any yet? Awkward.")
+            exit_message(
+                f"Uhh no recipes with {search_term} here. Have you added any yet? Awkward.")
         else:
             break
 
+    # Sorts search results alphabetically and case insensitive
+
     sorted_recipes = sorted(
         matching_recipes, key=lambda x: x["recipe_name"].lower())
+
+    # Displays the choices by recipe name
 
     recipe_choices = [Choice(value=index, name=recipe["recipe_name"])
                       for index, recipe in enumerate(sorted_recipes)]
@@ -369,6 +383,8 @@ def search_recipes():
     ).execute()
 
     selected_recipe = sorted_recipes[selected_recipe_index]
+
+    # Clears the screen and prints the recipe to view
 
     exit_message(
         f"\nSelected Recipe Details:\nName: {selected_recipe['recipe_name']}\nIngredients: {selected_recipe['ingredients']}\nMethod: {selected_recipe['method']}")
@@ -405,9 +421,21 @@ def export_to_pdf(recipe):
     pdf = PDF()
     pdf.add_page()
     pdf.chapter_title(recipe["recipe_name"])
-    pdf.chapter_body(f"Ingredients: {', '.join(recipe['ingredients'])}")
-    pdf.chapter_body(f"Method: {recipe['method']}")
-    pdf.output(f"{recipe['recipe_name']}_recipe.pdf")
+
+    ingredients = ', '.join(recipe['ingredients'])
+    method = recipe['method']
+
+    try:
+        pdf.chapter_body(f"Ingredients: {ingredients}")
+        pdf.chapter_body(f"Method: {method}")
+        pdf.output(f"{recipe['recipe_name']}_recipe.pdf")
+    except UnicodeEncodeError as e:
+        error_message = (
+            "Error exporting recipe to PDF. Please remove any special characters and try again."
+        )
+        print(error_message)
+        print(f"Error details: {str(e)}")
+        raise
 
 
 def export_recipe():
@@ -421,20 +449,22 @@ def export_recipe():
     """
     category = select_category()
 
-    error_message = "Recipe export canceled. Is it because you want to spend more time with me?"
+    error_message = "Recipe export canceled. Not the right time to leave the nest?"
 
     if user_exit(category, error_message):
         return
 
     selected_recipe = select_recipe(category, db)
 
-    # Exports selected_recipe to PDF and prints a confirmation statement to the user.
-
     if selected_recipe is not None:
-        export_to_pdf(selected_recipe)
-        exit_message(
-            f"Your recipe has achieved its lifelong dream of becoming a PDF. It's all grown up now and ready for the outside world.")
-
+        try:
+            export_to_pdf(selected_recipe)
+            exit_message(
+                f"Your recipe has achieved its lifelong dream of becoming a PDF. It's all grown up now and ready for the outside world.")
+        except UnicodeEncodeError as e:
+            # Catch UnicodeEncodeError
+            # Prints error message and returns to main menu
+            pass
 
 if __name__ == "__main__":
     export_recipe()

@@ -37,15 +37,16 @@ Users are also able to amend or delete recipes they have created.<br>
 One a recipe has been created, users receive a confirmation message so they know it has been successful.<br>
 I have implemented exception handling for invalid inputs from the user.
 
-### Feature 2: Display a list of available recipes. 
+### Feature 2: Modify, Delete and View current recipes
 
-With this feature, users are able to print a list of the available recipes in a category, or print all recipes from each category. Recipes are sorted alphabetically within each category for ease of navigation.<br>
+These features all have very similar code so I am rolling them into one. 
+With this feature, users are able to retrieve recipes from the database to edit name/ method/ ingredient, delete a current recipe or view a recipe.<br>
 I have implemented error handling for empty lists.
 
 ### Feature 3: Allow users to search for recipes based on ingredients.
 
-With this feature, users are able to search for recipes based on ingredients. There is an additional function allowing users to filter by category.<br>
-I have implemented error handling for invalid inputs or empty results.
+With this feature, users are able to search the database for recipes by name or by ingredient. Any matches are displayed alphabetically for them to click to view.<br>
+I have implemented error handling for invalid inputs and no matching search results.
 
 ### Other
 
