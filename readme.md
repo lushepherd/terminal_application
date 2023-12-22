@@ -2,8 +2,7 @@
 
 ## My Recipes Terminal Application
 
-Github: https://github.com/lushepherd/your-recipe-book
-
+Github: https://github.com/lushepherd/terminal_application/ <br>
 This is Term 1 Assignment 3 - Terminal Application.
 
 For my assignment, I decided to create a recipe application. 
