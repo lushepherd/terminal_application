@@ -1,5 +1,4 @@
 import os
-import sys
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from tinydb import TinyDB, Query
@@ -183,6 +182,7 @@ def add_recipe():
         category_db = db.table(category)
         category_db.insert(recipe_data)
         exit_message("Boom! Recipe added! 🤜🤛")
+
 
 if __name__ == "__main__":
     add_recipe()
@@ -416,6 +416,8 @@ class PDF(FPDF):
         self.set_font("Arial", "", 12)
         self.multi_cell(0, 10, body)
 
+# Handles unicode error and
+
 
 def export_to_pdf(recipe):
     pdf = PDF()
@@ -465,6 +467,7 @@ def export_recipe():
             # Catch UnicodeEncodeError
             # Prints error message and returns to main menu
             pass
+
 
 if __name__ == "__main__":
     export_recipe()
