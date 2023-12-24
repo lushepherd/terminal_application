@@ -149,9 +149,9 @@ If you receive this message, you will need to install Python3.
 [Here](https://ioflood.com/blog/?s=install+python) are some guides to installing Python3 depending on your OS.
 
 
-### How to...<a id="howto"></a>
+## How to...<a id="howto"></a>
 
-#### Add a recipe <a id="addrecipe"></a>
+### Add a recipe <a id="addrecipe"></a>
 1. Select Add a new recipe from the menu.
 2. Choose the category you would like to add your recipe to.<br><br>
 ![Add recipe](/images/addrecipe1.png)<br><br>
@@ -162,7 +162,7 @@ If you receive this message, you will need to install Python3.
 6. You should now see your confirmation that your recipe has been successfully added.<br><br>
 ![Add recipe success!](/images/addrecipe3.png)
 
-##### Troubleshooting
+#### Troubleshooting
 - If you are getting the following error, you have hit enter without inputting any text. Enter some text, or if you prefer to exit type "exit" to return to the main menu.<br><br>
 ![Empty input error add recipe](/images/addrecipeemptyinput.png)
 
@@ -170,7 +170,7 @@ If you receive this message, you will need to install Python3.
 ![Same name error add recipe](/images/addrecipesamenameerror.png)
 
  
- #### Modify a recipe <a id="modifyrecipe"></a>
+### Modify a recipe <a id="modifyrecipe"></a>
 1. Select Modify a recipe from the menu.
 2. Choose the category that contains the recipe you would like to modify.<br><br>
 ![Modify a recipe](/images/modifyrecipe1.png)<br><br>
@@ -182,11 +182,11 @@ If you receive this message, you will need to install Python3.
 6. You should now see confirmation that your recipe has been successfully modified.<br><br>
 ![Modify successful](/images/modifysuccess.png)
 
-##### Troubleshooting
+#### Troubleshooting
 - If you have selected a category and received this message, there are no recipes in your chosen category. Select another category (or add a recipe!)<br><br>
 ![Empty category error](/images/emptycategoryerror.png)
 
-#### Delete a recipe <a id="deleterecipe"></a>
+### Delete a recipe <a id="deleterecipe"></a>
 1. Select Delete a recipe from the menu.
 2. Choose the category that contains the recipe you would like to delete and then select the recipe.<br><br>
 ![Delete a recipe](/images/deleterecipe1.png)<br><br>
@@ -194,22 +194,22 @@ If you receive this message, you will need to install Python3.
 4. You should now see confirmation that your recipe has been successfully modified.<br><br>
 ![Delete successful](/images/deleterecipe2.png)
 
-##### Troubleshooting
+#### Troubleshooting
 - If you have selected a category and received this message, there are no recipes in your chosen category. Select another category (or add a recipe! Maybe not to just delete it again though...)<br><br>
 ![Empty category error](/images/emptycategoryerror.png)
 
-#### View a recipe <a id="viewrecipes"></a>
+### View a recipe <a id="viewrecipes"></a>
 1. Choose View your current recipes from the menu.
 2. Choose the category that contains the recipe you would like to view, then select your recipe.<br><br>
 ![View recipe](/images/viewrecipe.png)<br><br>
 3. You should now see your selected recipe displayed on the screen.
 ![View successful](/images/viewsuccess.png)
 
-##### Troubleshooting 
+#### Troubleshooting 
 - If you have selected a category and received this message, there are no recipes in your chosen category. Select another category (or add a recipe!)<br><br>
 ![Empty category error](/images/emptycategoryerror.png)
 
-#### Search for a recipe <a id="searchrecipes"></a>
+### Search for a recipe <a id="searchrecipes"></a>
 1. Choose Search for a recipe from the menu.
 2. Enter the name or ingredient you would like to search for in your recipe database.<br><br>
 ![Search recipe](/images/searchrecipe.png)<br><br>
@@ -218,7 +218,7 @@ If you receive this message, you will need to install Python3.
 4. Your chosen recipe will now be displayed on your screen.<br><br>
 ![Search successful](/images/viewsuccess.png)
 
-##### Troubleshooting
+#### Troubleshooting
 - If you can see the following error, you haven't input any text. Input a search term, or type exit to return to the main menu.<br><br>
 ![Empty search error](/images/emptysearcherror.png)
 
@@ -226,14 +226,14 @@ If you receive this message, you will need to install Python3.
 ![No items match search term](/images/searchtermerror.png)
 
 
-#### Export to PDF <a id="exportrecipe"></a>
+### Export to PDF <a id="exportrecipe"></a>
 1. Choose Export to PDF from the menu.
 2. Choose the category that contains the recipe you would like to view, then select your recipe.<br><br>
 ![Export recipe](/images/exportrecipe1.png)
 3. You should now see confirmation your recipe has been successfully exported. This will be located in the src folder for you to use.<br><br>
 ![Export successful](/images/exportsuccess.png)
 
-##### Troubleshooting
+#### Troubleshooting
 - If you have selected a category and received this message, there are no recipes in your chosen category. Select another category (or add a recipe!)<br><br>
 ![Empty category error](/images/emptycategoryerror.png)<br><br>
 - If you have received the following error, there is a character in your selected recipe not allowing the export function to proceed. Please remove any special characters. <br><br>
