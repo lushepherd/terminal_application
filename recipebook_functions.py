@@ -186,6 +186,7 @@ def modify_recipe():
     if user_exit(category, error_message):
         return
 
+    # Uses select_recipe function to check for recipes in category. If empty, will return an error
     selected_recipe = select_recipe(category, db)
 
     # Prints the selected recipe then prompts the user to confirm they would like to modify recipe
@@ -307,7 +308,7 @@ def search_recipes():
 
         all_recipes = get_all_recipes()
 
-        # Conditions = if search_term in recipe (recipe_name, ingredient) matches, it will be included in the matching_recipe list
+        # Checks for a match in the database for whether search term is present in recipe name or any ingredients
         matching_recipes = [recipe for recipe in all_recipes if search_term in recipe["recipe_name"].lower(
         ) or any(search_term in ingredient.lower() for ingredient in recipe["ingredients"])]
 
